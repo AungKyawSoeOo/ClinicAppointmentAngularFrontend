@@ -1,0 +1,68 @@
+<div class="home-container">
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 nz-typography>Healthcare at Your Fingertips</h1>
+      <p nz-typography nzType="secondary" class="hero-subtitle">
+        Book your next appointment in minutes with verified clinics and specialists.
+      </p>
+      <p nz-typography nzType="secondary" class="hero-text">
+        Finding the right care shouldn't be a headache. Our platform connects you with
+        verified healthcare professionals across multiple specialties. Find trusted
+        doctors, check availability and book appointments in seconds - no calls needed. 
+      </p>
+      <button nz-button nzType="primary" class="hero-btn">Book Now</button>
+    </div>
+  </div>
+
+
+  <div class="section how-it-works-section">
+    <h2 nz-typography class="section-title">How It Works</h2>
+    <p class="section-subtitle">Booking a clinic has never been easier.</p>
+    
+    <div nz-row [nzGutter]="[32, 32]" nzJustify="center" class="steps-row">
+      <div nz-col [nzXs]="24" [nzMd]="8" *ngFor="let step of steps; let i = index">
+        <div class="step-card">
+          <div class="step-icon-wrapper">
+            <span nz-icon [nzType]="step.icon" nzTheme="outline" class="step-icon"></span>
+            <div class="step-number">{{ i + 1 }}</div>
+          </div>
+          <h3 nz-typography>{{ step.title }}</h3>
+          <p nz-typography nzType="secondary">{{ step.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section specialties-section">
+    <h2 nz-typography class="section-title">Browse by Specialty</h2>
+    <p class="section-subtitle">Find the right specialist for your specific needs.</p>
+    
+    <div nz-row [nzGutter]="[24, 24]">
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" *ngFor="let spec of specialties">
+        <nz-card nzHoverable class="specialty-card">
+          <div class="specialty-content">
+            <span nz-icon [nzType]="spec.icon" nzTheme="twotone" [nzTwotoneColor]="spec.color" class="specialty-icon"></span>
+            <h4 nz-typography>{{ spec.name }}</h4>
+            <p nz-typography nzType="secondary">{{ spec.description }}</p>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+    
+    <div class="view-all-btn-wrapper">
+      <button nz-button nzType="default" nzSize="large" routerLink="/all-specialities">View All Specialties</button>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-content">
+      <h2 nz-typography style="color: white;">Are you a Clinic Owner?</h2>
+      <p nz-typography class="cta-subtitle">
+        Join our platform to manage your appointments seamlessly, increase your visibility, and reach more patients.
+      </p>
+      <button nz-button nzType="primary" nzSize="large" class="register-clinic-btn" routerLink="/clinic-register">
+        Register Your Clinic
+      </button>
+    </div>
+  </div>
+</div>

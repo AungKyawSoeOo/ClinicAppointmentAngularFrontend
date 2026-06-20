@@ -1,0 +1,26 @@
+.register-clinic-form{
+    max-width: 400px;
+    background-color: #fff;
+    padding: 20px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.clinic-register-form-margin {
+    margin-bottom: 16px;
+}
+
+.clinic-register-form-forgot {
+    float: right;
+}
+
+.clinic-register-form-button {
+    width: 100%;
+}
+
+.email-input,
+.password-input {
+    text-align: left;
+}

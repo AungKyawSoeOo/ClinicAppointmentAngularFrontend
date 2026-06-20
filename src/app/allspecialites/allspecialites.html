@@ -1,0 +1,16 @@
+  <div class="section specialties-section">
+    <h2 nz-typography class="section-title">All  Specialities</h2>
+    <p class="section-subtitle">Browse specialties to view available healthcare professionals.</p>
+    
+    <div nz-row [nzGutter]="[24, 24]">
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" *ngFor="let spec of specialties">
+        <nz-card nzHoverable class="specialty-card">
+          <div class="specialty-content">
+            <span nz-icon [nzType]="spec.icon" nzTheme="twotone" [nzTwotoneColor]="spec.color" class="specialty-icon"></span>
+            <h4 nz-typography>{{ spec.name }}</h4>
+            <p nz-typography nzType="secondary">{{ spec.description }}</p>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+    

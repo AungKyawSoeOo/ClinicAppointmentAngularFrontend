@@ -1,0 +1,204 @@
+.home-container {
+  margin: -24px;
+}
+
+.hero-section {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('/assets/images/doctor.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  padding: 100px 50px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #f0f0f0;
+  
+  display: flex;
+  align-items: center;
+  min-height: 550px; 
+}
+
+.hero-content {
+  max-width: 650px; 
+  margin: 0; 
+  position: relative;
+  z-index: 2;
+  text-align: left; 
+}
+
+.hero-section h1 {
+  color: #ffffff !important;
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-subtitle {
+  color: #f3f4f6 !important; 
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+.hero-text {
+  color: #e5e7eb !important;
+  font-size: 18px;
+  width: 100%; 
+  display: block;
+  margin: 0 0 32px 0; 
+}
+
+
+.section {
+  padding: 80px 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1f2937;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 18px;
+  color: #6b7280;
+  margin-bottom: 56px;
+}
+
+.how-it-works-section {
+  background-color: #fff;
+  max-width: 100%;
+}
+
+.steps-row {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.step-card {
+  text-align: center;
+  padding: 32px;
+}
+
+.step-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.step-icon {
+  font-size: 48px;
+  color: #1890ff;
+  background: #e6f7ff;
+  padding: 24px;
+  border-radius: 50%;
+}
+
+.step-number {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #0050b3;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  border: 2px solid white;
+}
+
+.step-card h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.specialty-card {
+  border-radius: 16px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.specialty-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  border-color: transparent;
+}
+
+.specialty-content {
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.specialty-icon {
+  font-size: 42px;
+  margin-bottom: 16px;
+}
+
+.specialty-content h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.view-all-btn-wrapper {
+  text-align: center;
+  margin-top: 48px;
+}
+
+.cta-section {
+  background: #002140; 
+  padding: 80px 50px; 
+  text-align: center;
+  border: none;
+}
+
+.cta-content h2 {
+  color: #ffffff !important;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.cta-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-subtitle {
+  color: #e6f7ff !important; 
+  font-size: 18px;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.register-clinic-btn {
+  background-color: #52c41a;
+  border-color: #52c41a;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 0 40px;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.register-clinic-btn:hover {
+  background-color: #73d13d; 
+  border-color: #73d13d;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(82, 196, 26, 0.3); 
+}

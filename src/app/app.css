@@ -1,0 +1,35 @@
+ nz-content {
+     background: #f5f7fa;
+     min-height: 100vh;
+ }
+
+ nz-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background:  #1677ff;
+  display: flex;
+  align-items: center;
+}
+.ant-menu-dark {
+  background: transparent !important;
+}
+
+.logo {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.user-area {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.avatar-btn {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}

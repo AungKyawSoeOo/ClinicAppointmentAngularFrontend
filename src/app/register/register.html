@@ -1,0 +1,61 @@
+<form nz-form [formGroup]="validateForm" class="register-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Enter Your Name">
+            <nz-input-wrapper>
+                <nz-icon nzInputPrefix nzType="user" />
+                <input nz-input formControlName="username" placeholder="Name" />
+            </nz-input-wrapper>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Enter Your Email">
+            <nz-input-wrapper>
+                <nz-icon nzInputPrefix nzType="mail" />
+                <input nz-input formControlName="email" placeholder="Email" />
+            </nz-input-wrapper>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control [nzErrorTip]="passwordErrorTpl">
+            <nz-input-password>
+                <nz-icon nzInputPrefix nzType="lock" />
+                <input nz-input type="password" formControlName="password" placeholder="Password" />
+            </nz-input-password>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control [nzErrorTip]="cpasswordErrorTpl">
+            <nz-input-password>
+                <nz-icon nzInputPrefix nzType="lock" />
+                <input nz-input type="password" formControlName="confirmPassword" placeholder="Confirm Password" />
+            </nz-input-password>
+        </nz-form-control>
+    </nz-form-item>
+
+    <div nz-row class="register-form-margin">
+        <button nz-button class="register-form-button register-form-margin" nzType="primary"
+            [disabled]="validateForm.invalid" [nzLoading]="loading">Register</button>
+        Or &nbsp;
+        <a routerLink="/login">
+            Login
+        </a>
+    </div>
+
+    <ng-template #passwordErrorTpl let-control>
+        @if (control.hasError('required')) {
+        Password is required.
+        }
+        @else if (control.hasError('weakPassword')) {
+        Password must be at least 8 characters and contain both letters and numbers.
+        }
+    </ng-template>
+
+    <ng-template #cpasswordErrorTpl let-control>
+        @if (control.hasError('required')) {
+        Confirm Password is required.
+        }
+        @else if (control.hasError('passwordMismatch')) {
+        Passwords do not match.
+        }
+    </ng-template>
+</form>
