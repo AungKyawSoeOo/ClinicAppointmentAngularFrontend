@@ -1,0 +1,33 @@
+<div class="section doctors-section">
+    <div class="section-header">
+        <h2 nz-typography class="section-title">Available Doctors</h2>
+        <p class="section-subtitle">- Clinic Name - </p>
+        <p class="section-subtitle">Select a doctor to book an appointment</p>
+    </div>
+
+    <div nz-row [nzGutter]="[24, 24]">
+        <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6" *ngFor="let doctor of doctors">
+            <nz-card nzHoverable class="doctor-card">
+                <div class="doctor-header">
+                    <nz-avatar [nzSize]="64" [nzSrc]="doctor.imageUrl" class="doctor-avatar"></nz-avatar>
+                    <div class="doctor-info">
+                        <h4 nz-typography>{{ doctor.name }}</h4>
+                        <nz-tag [nzColor]="'blue'">{{ doctor.specialty }}</nz-tag>
+                    </div>
+                </div>
+                <div class="doctor-details">
+                    <p nz-typography nzType="secondary">
+                        <span nz-icon nzType="clock-circle" nzTheme="outline"></span> Experience: {{ doctor.experience }}
+                    </p>
+                    <div class="availability">
+                        <span nz-icon nzType="calendar" nzTheme="outline"></span>
+                        <div class="days-container">
+                            <nz-tag *ngFor="let day of doctor.availableDays" nzColor="default">{{ day }}</nz-tag>
+                        </div>
+                    </div>
+                </div>
+                <button nz-button nzType="primary" nzBlock class="book-btn" [routerLink]="['/clinics', clinicId, 'doctors', doctor.id, 'appointment']">Book Appointment</button>
+            </nz-card>
+        </div>
+    </div>
+</div>

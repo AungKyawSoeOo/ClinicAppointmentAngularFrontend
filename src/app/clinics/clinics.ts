@@ -33,21 +33,25 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 export class Clinics {
     clinics = [
     {
+      id: 1,
       name: 'City Care Clinic',
       address: 'No. 12, Main Road',
       city: 'Yangon'
     },
     {
+      id: 2,
       name: 'ABC Medical Center',
       address: 'Street 5, Downtown',
       city: 'Yangon'
     },
     {
+      id: 3,
       name: 'Sunshine Health Clinic',
       address: 'West District',
       city: 'Mandalay'
     },
     {
+      id: 4,
       name: 'Heaven Health Clinic',
       address: 'Yankin District',
       city: 'Mandalay'

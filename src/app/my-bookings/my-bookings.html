@@ -1,0 +1,51 @@
+<div class="bookings-section">
+    <div class="section-header">
+        <h2 nz-typography class="section-title">My Bookings</h2>
+        <p class="section-subtitle">Manage your upcoming and past clinic appointments</p>
+    </div>
+
+    <nz-card class="bookings-card" [nzBordered]="false">
+        <nz-table #basicTable [nzData]="bookings" [nzPageSize]="10" nzShowPagination>
+            <thead>
+                <tr>
+                    <th>Clinic</th>
+                    <th>Doctor</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                    <td>{{ data.clinicName }}</td>
+                    <td>{{ data.doctorName }}</td>
+                    <td>
+                        <div>{{ data.date }}</div>
+                        <div class="booking-time">{{ data.time }}</div>
+                    </td>
+                    <td>
+                        <nz-tag [nzColor]="getStatusColor(data.status)">
+                            {{ data.status | uppercase }}
+                        </nz-tag>
+                    </td>
+                    <td>
+                        <ng-container *ngIf="data.status === 'Upcoming'">
+                            <button nz-button nzType="text" nzDanger
+                                nz-popconfirm
+                                nzPopconfirmTitle="Are you sure you want to cancel this booking?"
+                                nzOkText="Yes"
+                                nzCancelText="No"
+                                (nzOnConfirm)="cancelBooking(data.id)"
+                            >
+                                Cancel
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="data.status !== 'Upcoming'">
+                            <span class="no-action">-</span>
+                        </ng-container>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+</div>

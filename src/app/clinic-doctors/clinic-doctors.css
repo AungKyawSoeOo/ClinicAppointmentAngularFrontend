@@ -1,0 +1,81 @@
+.doctors-section {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: #1890ff;
+    font-weight: 600;
+}
+
+.section-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.doctor-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(24, 144, 255, 0.15);
+}
+
+.doctor-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.doctor-avatar {
+    background-color: #e6f7ff;
+    border: 2px solid #1890ff;
+}
+
+.doctor-info h4 {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.doctor-details {
+    flex-grow: 1;
+    margin-bottom: 1.5rem;
+}
+
+.doctor-details p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.availability {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: #666;
+}
+
+.days-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.book-btn {
+    border-radius: 6px;
+    font-weight: 500;
+}

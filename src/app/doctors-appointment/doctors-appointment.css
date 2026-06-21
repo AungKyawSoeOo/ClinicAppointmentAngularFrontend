@@ -1,0 +1,107 @@
+.appointment-section {
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: #1890ff;
+    font-weight: 600;
+}
+
+.section-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.week-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.current-week-label {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #333;
+    min-width: 120px;
+}
+
+.schedule-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.tab-title-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.day-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.day-date {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.slots-container {
+    padding: 1.5rem 0;
+}
+
+.slots-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #333;
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    padding: 0 1rem;
+}
+
+.time-slot-btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.time-slot-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(24, 144, 255, 0.2);
+}
+
+.time-slot-btn.booked {
+    background-color: #f5f5f5;
+    color: #b8b8b8;
+    border-color: #d9d9d9;
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
+::ng-deep .ant-tabs-nav-list {
+    margin: 0 auto;
+}
+
+::ng-deep .ant-tabs-tab {
+    padding: 8px 0;
+}
+
+::ng-deep .ant-tabs-tab-active .day-name,
+::ng-deep .ant-tabs-tab-active .day-date {
+    color: #1890ff;
+}

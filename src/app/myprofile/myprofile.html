@@ -1,0 +1,91 @@
+<div class="profile-section">
+    <div class="section-header">
+        <h2 nz-typography class="section-title">My Profile</h2>
+        <p class="section-subtitle">Manage your personal information and account settings</p>
+    </div>
+
+    <nz-card class="profile-card" [nzBordered]="false">
+        <div class="profile-header">
+            <div class="profile-status">
+                <span class="status-label">Account Status:</span>
+                <nz-tag [nzColor]="patientData.status === 'Active' ? 'green' : 'orange'">
+                    {{ patientData.status | uppercase }}
+                </nz-tag>
+            </div>
+            <div class="profile-actions">
+                <button nz-button *ngIf="!isEditMode" nzType="default" (click)="toggleEditMode()">
+                    Edit Profile
+                </button>
+                <button nz-button *ngIf="isEditMode" nzType="default" (click)="toggleEditMode()" style="margin-right: 8px;">
+                    Cancel
+                </button>
+                <button nz-button *ngIf="isEditMode" nzType="primary" (click)="saveProfile()">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+
+        <nz-divider></nz-divider>
+
+        <form nz-form [formGroup]="profileForm" nzLayout="vertical" class="profile-form">
+            <div nz-row [nzGutter]="24">
+                <div nz-col [nzXs]="24" [nzMd]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>Full Name</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your full name!">
+                            <input nz-input formControlName="full_name" placeholder="John Doe" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzXs]="24" [nzMd]="12">
+                    <nz-form-item>
+                        <nz-form-label>Email Address</nz-form-label>
+                        <nz-form-control>
+                            <input nz-input formControlName="email" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row [nzGutter]="24">
+                <div nz-col [nzXs]="24" [nzMd]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>Phone Number</nz-form-label>
+                        <nz-form-control nzErrorTip="Please input your phone number!">
+                            <input nz-input formControlName="phone" placeholder="+959..." />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzXs]="24" [nzMd]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>Gender</nz-form-label>
+                        <nz-form-control nzErrorTip="Please select your gender!">
+                            <nz-select formControlName="gender" placeholder="Select gender">
+                                <nz-option nzValue="Male" nzLabel="Male"></nz-option>
+                                <nz-option nzValue="Female" nzLabel="Female"></nz-option>
+                                <nz-option nzValue="Other" nzLabel="Other"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row [nzGutter]="24">
+                <div nz-col [nzXs]="24" [nzMd]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>Date of Birth</nz-form-label>
+                        <nz-form-control nzErrorTip="Please select your date of birth!">
+                            <nz-date-picker  formControlName="dob"/>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzXs]="24" [nzMd]="12">
+                    <div class="created-at-info">
+                        <span class="info-label">Member Since:</span>
+                        <span class="info-value">{{ patientData.created_at | date:'mediumDate' }}</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </nz-card>
+</div>
