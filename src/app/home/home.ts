@@ -26,17 +26,26 @@ import { CommonModule } from '@angular/common';
   styleUrl: './home.css',
 })
 export class Home {
-  specialties = [
-    { name: 'Dentistry', icon: 'medicine-box', color: '#1890ff', description: 'Find top dentists for your oral health.' },
-    { name: 'Cardiology', icon: 'medicine-box', color: '#1890ff', description: 'Expert heart specialists at your service.' },
-    { name: 'Pediatrics', icon: 'medicine-box', color: '#1890ff', description: 'Compassionate care for your children.' },
-    { name: 'Optometry', icon: 'medicine-box', color: '#1890ff', description: 'Vision care and comprehensive eye exams.' },
-    { name: 'Neurology', icon: 'medicine-box', color: '#1890ff', description: 'Specialized care for brain and nerves.' },
-    { name: 'Orthopedics', icon: 'medicine-box', color: '#1890ff', description: 'Bone and joint specialists.' },
+  clinics = [
+    {
+      name: 'City Care Clinic',
+      address: 'No. 12, Main Road',
+      city: 'Yangon'
+    },
+    {
+      name: 'ABC Medical Center',
+      address: 'Street 5, Downtown',
+      city: 'Yangon'
+    },
+    {
+      name: 'Sunshine Health Clinic',
+      address: 'West District',
+      city: 'Mandalay'
+    }
   ];
 
   steps = [
-    { title: 'Search', icon: 'search', description: 'Find clinics by specialty, name, or location near you.' },
+    { title: 'Search', icon: 'search', description: 'Find clinics by location near you.' },
     { title: 'Choose', icon: 'calendar', description: 'Pick an available time slot that fits your schedule.' },
     { title: 'Book', icon: 'check-circle', description: 'Confirm your appointment instantly online.' },
   ];
