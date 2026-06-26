@@ -1,0 +1,49 @@
+.admin-page-container {
+  padding: 24px;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.main-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.tab-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 8px 0;
+}
+
+.search-input {
+  width: 300px;
+}
+
+.action-link {
+  color: #1890ff;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.action-link:hover {
+  color: #40a9ff;
+}

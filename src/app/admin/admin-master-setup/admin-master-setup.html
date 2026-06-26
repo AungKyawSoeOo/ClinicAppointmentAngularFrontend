@@ -1,0 +1,158 @@
+<div class="admin-page-container">
+  <div class="page-header">
+    <h1 class="page-title">Master Data Setup</h1>
+    <p class="page-subtitle">Configure City and Township master lists for the application.</p>
+  </div>
+
+  <nz-card [nzBordered]="false" class="main-card">
+    <nz-tabs>
+      <!-- City Setup Tab -->
+      <nz-tab nzTitle="City Setup">
+        <div class="tab-toolbar">
+          <button nz-button nzType="primary" (click)="showCityModal()">
+            <span nz-icon nzType="plus"></span> Add New City
+          </button>
+          <nz-input-group [nzPrefix]="prefixIconSearch" class="search-input">
+            <input type="text" nz-input placeholder="Search cities..." />
+          </nz-input-group>
+          <ng-template #prefixIconSearch>
+            <span nz-icon nzType="search"></span>
+          </ng-template>
+        </div>
+
+        <nz-table #cityTable [nzData]="cities" [nzPageSize]="10">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>City Name</th>
+              <th>Code</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of cityTable.data">
+              <td>{{ data.id }}</td>
+              <td><strong>{{ data.name }}</strong></td>
+              <td>{{ data.code }}</td>
+              <td>
+                <nz-tag [nzColor]="data.status === 'Active' ? 'success' : 'default'">
+                  {{ data.status }}
+                </nz-tag>
+              </td>
+              <td>
+                <a class="action-link" (click)="toggleCityStatus(data.id)">
+                  {{ data.status === 'Active' ? 'Deactivate' : 'Activate' }}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+
+      <nz-tab nzTitle="Township Setup">
+        <div class="tab-toolbar">
+          <button nz-button nzType="primary" (click)="showTownshipModal()">
+            <span nz-icon nzType="plus"></span> Add New Township
+          </button>
+          <nz-input-group [nzPrefix]="prefixIconSearchTownship" class="search-input">
+            <input type="text" nz-input placeholder="Search townships..." />
+          </nz-input-group>
+          <ng-template #prefixIconSearchTownship>
+            <span nz-icon nzType="search"></span>
+          </ng-template>
+        </div>
+
+        <nz-table #townshipTable [nzData]="townships" [nzPageSize]="10">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Township Name</th>
+              <th>Code</th>
+              <th>City</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of townshipTable.data">
+              <td>{{ data.id }}</td>
+              <td><strong>{{ data.name }}</strong></td>
+              <td>{{ data.code }}</td>
+              <td>{{ data.cityName }}</td>
+              <td>
+                <nz-tag [nzColor]="data.status === 'Active' ? 'success' : 'default'">
+                  {{ data.status }}
+                </nz-tag>
+              </td>
+              <td>
+                <a class="action-link" (click)="toggleTownshipStatus(data.id)">
+                  {{ data.status === 'Active' ? 'Deactivate' : 'Activate' }}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+    </nz-tabs>
+  </nz-card>
+
+  <!-- Add New City Modal -->
+  <nz-modal
+    [(nzVisible)]="isCityModalVisible"
+    nzTitle="Add New City"
+    (nzOnCancel)="handleCityModalCancel()"
+    (nzOnOk)="handleCityModalOk()"
+    nzOkText="Save">
+    <ng-container *nzModalContent>
+      <form nz-form nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label nzRequired>City Name</nz-form-label>
+          <nz-form-control nzErrorTip="Please input the city name!">
+            <input nz-input name="cityName" [(ngModel)]="newCity.name" placeholder="Enter city name" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>City Code</nz-form-label>
+          <nz-form-control nzErrorTip="Please input the city code!">
+            <input nz-input name="cityCode" [(ngModel)]="newCity.code" placeholder="e.g. YGN" />
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
+
+  <nz-modal
+    [(nzVisible)]="isTownshipModalVisible"
+    nzTitle="Add New Township"
+    (nzOnCancel)="handleTownshipModalCancel()"
+    (nzOnOk)="handleTownshipModalOk()"
+    nzOkText="Save">
+    <ng-container *nzModalContent>
+      <form nz-form nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label nzRequired>Select City</nz-form-label>
+          <nz-form-control nzErrorTip="Please select a city!">
+            <nz-select name="cityId" [(ngModel)]="newTownship.cityId" nzPlaceHolder="Choose a city">
+              <nz-option *ngFor="let city of cities" [nzValue]="city.id" [nzLabel]="city.name"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzRequired>Township Name</nz-form-label>
+          <nz-form-control nzErrorTip="Please input the township name!">
+            <input nz-input name="townshipName" [(ngModel)]="newTownship.name" placeholder="Enter township name" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzRequired>Township Code</nz-form-label>
+          <nz-form-control nzErrorTip="Please input the township code!">
+            <input nz-input name="townshipCode" [(ngModel)]="newTownship.code" placeholder="e.g. BHN" />
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
+</div>

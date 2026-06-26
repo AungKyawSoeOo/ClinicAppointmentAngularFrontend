@@ -1,0 +1,57 @@
+<div class="admin-page-container">
+  <div class="page-header">
+    <h1 class="page-title">Clinic Approvals</h1>
+    <p class="page-subtitle">Review and manage clinic registration requests.</p>
+  </div>
+
+  <nz-card [nzBordered]="false" class="main-card">
+    <nz-table #basicTable [nzData]="clinics" [nzPageSize]="10">
+      <thead>
+        <tr>
+          <th>Clinic Name</th>
+          <th>Liscense Number</th>
+          <th>Location</th>
+          <th>Registered Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td><strong>{{ data.name }}</strong></td>
+          <td>{{ data.liscense_number }}</td>
+          <td>{{ data.location }}</td>
+          <td>{{ data.registeredDate }}</td>
+          <td>
+            <nz-tag
+              [nzColor]="data.status === 'Approved' ? 'success' : data.status === 'Rejected' ? 'error' : 'warning'">
+              {{ data.status }}
+            </nz-tag>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button
+                nz-button
+                nzType="primary"
+                nzSize="small"
+                class="approve-btn"
+                (click)="approveClinic(data.id)">
+                Approve
+              </button>
+              <nz-divider nzType="vertical"></nz-divider>
+              <button
+                nz-button
+                nzType="primary"
+                nzDanger
+                nzSize="small"
+                class="reject-btn"
+                (click)="rejectClinic(data.id)">
+                Reject
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
