@@ -1,0 +1,259 @@
+<div class="add-doctor-container">
+  <div class="header-section">
+    <h2 nz-typography class="title">Add Doctor to Clinic</h2>
+    <p nz-typography nzType="secondary" class="subtitle">
+      Register and configure a new doctor profile for your clinic's booking schedule.
+    </p>
+  </div>
+
+  <div nz-row [nzGutter]="24">
+    <!-- Form Section -->
+    <div nz-col [nzXs]="24" [nzLg]="14">
+      <nz-card [nzBordered]="false" class="form-card">
+        <h3 nz-typography class="form-title">
+          <span nz-icon nzType="form" nzTheme="outline"></span> Doctor Information
+        </h3>
+        <nz-divider class="card-divider"></nz-divider>
+
+        <form nz-form [nzLayout]="'vertical'" [formGroup]="doctorForm" (ngSubmit)="submitForm()">
+          
+          <div nz-row [nzGutter]="16">
+            <!-- Doctor Name -->
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="doctor_name">Doctor Name</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter the doctor's full name (max 100 chars)">
+                  <nz-input-group nzPrefixIcon="user">
+                    <input nz-input formControlName="doctor_name" id="doctor_name" placeholder="Dr. Jane Doe" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- License Number -->
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="doctor_license_no">License Number</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter the professional license number">
+                  <nz-input-group nzPrefixIcon="idcard">
+                    <input nz-input formControlName="doctor_license_no" id="doctor_license_no" placeholder="LIC-992384-MD" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div nz-row [nzGutter]="16">
+            <!-- Specialization -->
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="specialization">Specialization</nz-form-label>
+                <nz-form-control nzErrorTip="Please select a specialization">
+                  <nz-select formControlName="specialization" id="specialization" nzPlaceHolder="Select specialization">
+                    <nz-option *ngFor="let opt of specializationOptions" [nzValue]="opt" [nzLabel]="opt"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Experience -->
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="experience">Experience (Years)</nz-form-label>
+                <nz-form-control nzErrorTip="Enter years of experience (0-60)">
+                  <nz-input-number formControlName="experience" id="experience" [nzMin]="0" [nzMax]="60" [nzStep]="1" style="width: 100%;" nzPlaceHolder="e.g. 8"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div nz-row [nzGutter]="16">
+            <!-- Phone -->
+            <div nz-col [nzXs]="24" [nzSm]="24">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="phone">Contact Number</nz-form-label>
+                <nz-form-control nzErrorTip="Enter a valid phone number (e.g. 0912345678 or +95912345678)">
+                  <nz-input-group nzPrefixIcon="phone">
+                    <input nz-input formControlName="phone" id="phone" placeholder="e.g. 09123456789" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <h3 nz-typography class="form-title section-divider">
+            <span nz-icon nzType="schedule" nzTheme="outline"></span> Schedule & Capacity
+          </h3>
+          <nz-divider class="card-divider"></nz-divider>
+
+          <div nz-row [nzGutter]="16">
+            <!-- Consultation Duration -->
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="consultation_duration">Consultation Duration (Mins)</nz-form-label>
+                <nz-form-control nzErrorTip="Enter minutes per patient (5-120)">
+                  <nz-input-number formControlName="consultation_duration" id="consultation_duration" [nzMin]="5" [nzMax]="120" style="width: 100%;" nzPlaceHolder="15"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Max Capacity per Slot -->
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="max_capacity_per_slot">Max Patients per Slot</nz-form-label>
+                <nz-form-control nzErrorTip="Enter max capacity per time slot (1-20)">
+                  <nz-input-number formControlName="max_capacity_per_slot" id="max_capacity_per_slot" [nzMin]="1" [nzMax]="20" style="width: 100%;" nzPlaceHolder="1"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div nz-row [nzGutter]="16">
+            <!-- Working Days -->
+            <div nz-col [nzXs]="24">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="working_days">Working Days</nz-form-label>
+                <nz-form-control nzErrorTip="Select at least one working day">
+                  <nz-select formControlName="working_days" id="working_days" nzMode="multiple" nzPlaceHolder="Select working days">
+                    <nz-option *ngFor="let day of daysOfWeek" [nzValue]="day.value" [nzLabel]="day.label"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div nz-row [nzGutter]="16">
+            <!-- Start Time -->
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="start_time">Shift Start Time</nz-form-label>
+                <nz-form-control nzErrorTip="Please select daily start time">
+                  <nz-time-picker formControlName="start_time" id="start_time" nzFormat="HH:mm" style="width: 100%;" nzPlaceHolder="Select start time"></nz-time-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- End Time -->
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired nzFor="end_time">Shift End Time</nz-form-label>
+                <nz-form-control nzErrorTip="Please select daily end time">
+                  <nz-time-picker formControlName="end_time" id="end_time" nzFormat="HH:mm" style="width: 100%;" nzPlaceHolder="Select end time"></nz-time-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button nz-button nzType="primary" nzSize="large" [nzLoading]="loading" class="submit-btn">
+              <span nz-icon nzType="plus" nzTheme="outline"></span> Add Doctor Profile
+            </button>
+            <button nz-button nzType="default" nzSize="large" type="button" (click)="doctorForm.reset()" class="reset-btn">
+              Reset
+            </button>
+          </div>
+
+        </form>
+      </nz-card>
+    </div>
+
+    <!-- Live Preview Section -->
+    <div nz-col [nzXs]="24" [nzLg]="10" class="preview-col">
+      <div class="sticky-preview">
+        <div class="preview-badge-wrapper">
+          <nz-tag nzColor="processing" class="preview-badge">LIVE PROFILE PREVIEW</nz-tag>
+        </div>
+
+        <nz-card class="doctor-preview-card" [nzBordered]="false">
+          <div class="doctor-header">
+            <nz-avatar [nzSize]="80" [nzSrc]="getAvatarUrl()" class="doctor-avatar"></nz-avatar>
+            <div class="doctor-info">
+              <h3 nz-typography class="preview-doc-name">
+                {{ doctorForm.get('doctor_name')?.value || 'Dr. Full Name' }}
+              </h3>
+              <nz-tag [nzColor]="'blue'" class="preview-specialty">
+                {{ doctorForm.get('specialization')?.value || 'Specialization' }}
+              </nz-tag>
+            </div>
+          </div>
+
+          <nz-divider class="preview-divider"></nz-divider>
+
+          <div class="doctor-details">
+            <div class="detail-item">
+              <span nz-icon nzType="idcard" nzTheme="outline" class="detail-icon"></span>
+              <div class="detail-content">
+                <span class="detail-label">License:</span>
+                <span class="detail-val">{{ doctorForm.get('doctor_license_no')?.value || 'Not provided' }}</span>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <span nz-icon nzType="clock-circle" nzTheme="outline" class="detail-icon"></span>
+              <div class="detail-content">
+                <span class="detail-label">Experience:</span>
+                <span class="detail-val">
+                  {{ doctorForm.get('experience')?.value !== '' && doctorForm.get('experience')?.value !== null ? doctorForm.get('experience')?.value + ' Years' : 'Not provided' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <span nz-icon nzType="phone" nzTheme="outline" class="detail-icon"></span>
+              <div class="detail-content">
+                <span class="detail-label">Contact:</span>
+                <span class="detail-val">{{ doctorForm.get('phone')?.value || 'Not provided' }}</span>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <span nz-icon nzType="dashboard" nzTheme="outline" class="detail-icon"></span>
+              <div class="detail-content">
+                <span class="detail-label">Duration & Cap:</span>
+                <span class="detail-val">
+                  {{ doctorForm.get('consultation_duration')?.value }} mins/slot • Max {{ doctorForm.get('max_capacity_per_slot')?.value }} patient(s)
+                </span>
+              </div>
+            </div>
+
+            <div class="detail-item working-days-item">
+              <span nz-icon nzType="calendar" nzTheme="outline" class="detail-icon"></span>
+              <div class="detail-content">
+                <span class="detail-label">Working Days:</span>
+                <div class="days-container">
+                  <ng-container *ngIf="getSelectedDaysShortLabels().length > 0; else noDays">
+                    <nz-tag *ngFor="let day of getSelectedDaysShortLabels()" nzColor="success">{{ day }}</nz-tag>
+                  </ng-container>
+                  <ng-template #noDays>
+                    <span class="text-placeholder">No days selected</span>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <span nz-icon nzType="field-time" nzTheme="outline" class="detail-icon"></span>
+              <div class="detail-content">
+                <span class="detail-label">Shift Hours:</span>
+                <span class="detail-val">
+                  <ng-container *ngIf="doctorForm.get('start_time')?.value && doctorForm.get('end_time')?.value; else noHours">
+                    {{ doctorForm.get('start_time')?.value | date:'hh:mm a' }} - {{ doctorForm.get('end_time')?.value | date:'hh:mm a' }}
+                  </ng-container>
+                  <ng-container *ngIf="doctorForm.get('start_time')?.value && !doctorForm.get('end_time')?.value">
+                    Starts at {{ doctorForm.get('start_time')?.value | date:'hh:mm a' }}
+                  </ng-container>
+                  <ng-container *ngIf="!doctorForm.get('start_time')?.value && doctorForm.get('end_time')?.value">
+                    Ends at {{ doctorForm.get('end_time')?.value | date:'hh:mm a' }}
+                  </ng-container>
+                  <ng-template #noHours>
+                    <span class="text-placeholder">Shift hours not set</span>
+                  </ng-template>
+                </span>
+              </div>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+</div>

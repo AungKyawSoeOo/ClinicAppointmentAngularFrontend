@@ -1,0 +1,215 @@
+.add-doctor-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 0 24px 0;
+}
+
+.header-section {
+  margin-bottom: 24px;
+}
+
+.header-section .title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #1f2937;
+}
+
+.header-section .subtitle {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.form-card {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  padding: 8px;
+}
+
+.form-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.card-divider {
+  margin: 12px 0 20px 0;
+}
+
+.section-divider {
+  margin-top: 24px;
+}
+
+.form-actions {
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+}
+
+.submit-btn {
+  min-width: 160px;
+  background: #1890ff;
+  border-color: #1890ff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.submit-btn:hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.reset-btn {
+  border-radius: 6px;
+}
+
+/* Sticky Preview column styling */
+.preview-col {
+  position: relative;
+}
+
+.sticky-preview {
+  position: sticky;
+  top: 24px;
+}
+
+.preview-badge-wrapper {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.preview-badge {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* Doctor Preview Card */
+.doctor-preview-card {
+  border-radius: 16px;
+  border: 1px solid rgba(24, 144, 255, 0.15);
+  box-shadow: 0 12px 32px rgba(24, 144, 255, 0.08);
+  background: linear-gradient(145deg, #ffffff 0%, #f9fbfd 100%);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.doctor-preview-card:hover {
+  box-shadow: 0 16px 40px rgba(24, 144, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.doctor-preview-card .doctor-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.doctor-preview-card .doctor-avatar {
+  border: 3px solid #e6f7ff;
+  background: #ffffff;
+}
+
+.doctor-preview-card .doctor-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.preview-doc-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0c1a30;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.preview-specialty {
+  align-self: flex-start;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.preview-divider {
+  margin: 16px 0;
+}
+
+.doctor-preview-card .doctor-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.detail-icon {
+  font-size: 16px;
+  color: #1890ff;
+  margin-top: 3px;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #8c8c8c;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.detail-val {
+  font-size: 14px;
+  color: #262626;
+  font-weight: 500;
+}
+
+.working-days-item .days-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.text-placeholder {
+  color: #bfbfbf;
+  font-style: italic;
+  font-size: 13px;
+}
+
+.preview-actions {
+  margin-top: 24px;
+}
+
+.book-btn-mock {
+  border-radius: 8px;
+  font-weight: 600;
+  height: 40px;
+  background: #d9d9d9;
+  border-color: #d9d9d9;
+  color: #8c8c8c;
+}
+
+/* Adjustments for smaller viewports */
+@media (max-width: 992px) {
+  .sticky-preview {
+    position: static;
+    margin-top: 24px;
+  }
+}

@@ -1,0 +1,511 @@
+.clinic-doctors-list-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 0 24px 0;
+}
+
+.header-section {
+  margin-bottom: 24px;
+}
+
+.header-section .title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #1f2937;
+}
+
+.header-section .subtitle {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.add-doctor-btn {
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.column-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+
+/* Sidebar scroll list */
+.doctors-scroll-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 700px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* Scrollbar styling */
+.doctors-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.doctors-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.doctors-scroll-container::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 10px;
+}
+
+.doctors-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}
+
+/* Doctor card item */
+.doctor-card-item {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+}
+
+.doctor-card-item:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.doctor-card-item.selected-doctor {
+  border-color: #1890ff;
+  border-width: 2px;
+  background: #f0f7ff;
+  box-shadow: 0 10px 15px -3px rgba(24, 144, 255, 0.15);
+}
+
+.card-left {
+  margin-right: 16px;
+}
+
+.doctor-avatar {
+  border: 2px solid #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card-right {
+  flex-grow: 1;
+}
+
+.doc-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 6px 0;
+}
+
+.doc-specialty-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.spec-tag {
+  font-size: 11px;
+  margin: 0;
+}
+
+.exp-text {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.doc-meta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.doc-meta-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.selection-indicator {
+  color: #1890ff;
+  font-size: 16px;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Booking Dashboard Right-Side */
+.bookings-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-header-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+  border: 1px solid #e5e7eb;
+}
+
+.header-details {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-avatar {
+  border: 3px solid #e6f7ff;
+}
+
+.header-info {
+  flex-grow: 1;
+}
+
+.header-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.header-specialty-text {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.header-meta-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Date ribbon */
+.date-strip-container {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.strip-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-ribbon {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+/* Ribbon Scrollbar */
+.date-ribbon::-webkit-scrollbar {
+  height: 4px;
+}
+
+.date-ribbon::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.date-ribbon::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+.date-ribbon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 75px;
+  padding: 10px 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.date-ribbon-item:hover:not(.off-day) {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.date-ribbon-item.active-date {
+  background: #1890ff;
+  border-color: #1890ff;
+  color: #ffffff;
+}
+
+.date-ribbon-item.active-date .day-name-short,
+.date-ribbon-item.active-date .date-num {
+  color: #ffffff;
+}
+
+.day-name-short {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #9ca3af;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.date-num {
+  font-size: 15px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+.off-day {
+  opacity: 0.55;
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.off-badge {
+  font-size: 9px;
+  background: #e5e7eb;
+  color: #6b7280;
+  padding: 1px 4px;
+  border-radius: 4px;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+/* Bookings List Card */
+.bookings-list-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e5e7eb;
+}
+
+.bookings-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.list-divider {
+  margin: 16px 0;
+}
+
+.off-day-message {
+  padding: 12px 0;
+}
+
+.no-slots-message {
+  text-align: center;
+  padding: 40px 0;
+  color: #9ca3af;
+}
+
+/* Bookings Timeline Schedule */
+.bookings-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeline-slot-item {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s ease;
+}
+
+.timeline-slot-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Side indicator border matching state */
+.slot-available {
+  border-left: 5px solid #10b981; /* Green */
+}
+
+.slot-booked {
+  border-left: 5px solid #f59e0b; /* Amber */
+}
+
+.slot-checked-in {
+  border-left: 5px solid #3b82f6; /* Blue */
+}
+
+.slot-completed {
+  border-left: 5px solid #10b981; /* Green */
+  background: #f9fafb;
+}
+
+.slot-cancelled {
+  border-left: 5px solid #ef4444; /* Red */
+  background: #f9fafb;
+  opacity: 0.75;
+}
+
+/* Slot column styling */
+.slot-time {
+  width: 170px;
+  background: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4b5563;
+  gap: 6px;
+  padding: 16px;
+  text-align: center;
+}
+
+.slot-content {
+  flex-grow: 1;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.available-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slot-placeholder-text {
+  font-size: 13px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Patient Box */
+.patient-details-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.patient-primary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.patient-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.patient-secondary {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.contact-detail {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Empty State Card */
+.empty-state-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e5e7eb;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: #bfbfbf;
+}
+
+.empty-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0;
+}
+
+.empty-content p {
+  color: #6b7280;
+  max-width: 320px;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .timeline-slot-item {
+    flex-direction: column;
+  }
+  
+  .slot-time {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 8px 16px;
+  }
+}

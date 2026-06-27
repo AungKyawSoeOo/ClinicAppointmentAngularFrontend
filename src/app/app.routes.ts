@@ -10,6 +10,8 @@ import { MyBookings } from './my-bookings/my-bookings';
 import { Myprofile } from './myprofile/myprofile';
 import { AdminClinics } from './admin/admin-clinics/admin-clinics';
 import { AdminMasterSetup } from './admin/admin-master-setup/admin-master-setup';
+import { DoctorsAdd } from './doctors-add/doctors-add';
+import { ClinicDoctorsList } from './clinic-doctors-list/clinic-doctors-list';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -23,5 +25,7 @@ export const routes: Routes = [
     { path: 'profile', component: Myprofile },
     { path: 'admin/clinics', component: AdminClinics },
     { path: 'admin/location-setup', component: AdminMasterSetup },
+    { path: 'clinic/doctors/add', component: DoctorsAdd },
+    { path: 'clinic/:clinicId/doctors-list', component: ClinicDoctorsList },
     { path: '**', redirectTo: '' }
 ];

@@ -1,0 +1,182 @@
+<div class="clinic-doctors-list-container">
+  <div class="header-section">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h2 nz-typography class="title">Clinic Doctor Management</h2>
+        <p nz-typography nzType="secondary" class="subtitle">
+          Manage your clinic's doctor roster and view patient bookings by date.
+        </p>
+      </div>
+      <div nz-col>
+        <button nz-button nzType="primary" routerLink="/clinic/doctors/add" class="add-doctor-btn">
+          <span nz-icon nzType="plus" nzTheme="outline"></span> Add New Doctor
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div nz-row [nzGutter]="24">
+    <!-- Left Column: Doctor Cards List -->
+    <div nz-col [nzXs]="24" [nzLg]="9">
+      <h3 nz-typography class="column-title">Doctors Roster</h3>
+      <div class="doctors-scroll-container">
+        <div 
+          *ngFor="let doctor of doctors" 
+          class="doctor-card-item"
+          [class.selected-doctor]="doctor.id === selectedDoctor?.id"
+          (click)="selectDoctor(doctor)"
+        >
+          <div class="card-left">
+            <nz-avatar [nzSize]="60" [nzSrc]="doctor.imageUrl" class="doctor-avatar"></nz-avatar>
+          </div>
+          <div class="card-right">
+            <h4 class="doc-name">{{ doctor.name }}</h4>
+            <div class="doc-specialty-wrapper">
+              <nz-tag nzColor="blue" class="spec-tag">{{ doctor.specialty }}</nz-tag>
+              <span class="exp-text">{{ doctor.experience }} exp</span>
+            </div>
+            <div class="doc-meta-info">
+              <p><span nz-icon nzType="idcard" nzTheme="outline"></span> {{ doctor.license }}</p>
+              <p><span nz-icon nzType="clock-circle" nzTheme="outline"></span> {{ doctor.startTime }} - {{ doctor.endTime }}</p>
+            </div>
+          </div>
+          <div class="selection-indicator" *ngIf="doctor.id === selectedDoctor?.id">
+            <span nz-icon nzType="right" nzTheme="outline"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Doctor Details & Bookings Grid -->
+    <div nz-col [nzXs]="24" [nzLg]="15">
+      <div *ngIf="selectedDoctor; else noDoctorSelected" class="bookings-dashboard">
+        
+        <!-- Doctor Profile Card Header -->
+        <nz-card [nzBordered]="false" class="dashboard-header-card">
+          <div class="header-details">
+            <nz-avatar [nzSize]="80" [nzSrc]="selectedDoctor.imageUrl" class="header-avatar"></nz-avatar>
+            <div class="header-info">
+              <h2 class="header-name">{{ selectedDoctor.name }}</h2>
+              <p class="header-specialty-text">{{ selectedDoctor.specialty }} • {{ selectedDoctor.experience }} Experience</p>
+              <div class="header-meta-tags">
+                <nz-tag nzColor="default">License: {{ selectedDoctor.license }}</nz-tag>
+                <nz-tag nzColor="default">Duration: {{ selectedDoctor.consultationDuration }} mins/patient</nz-tag>
+                <nz-tag nzColor="default">Capacity: {{ selectedDoctor.maxCapacity }} per slot</nz-tag>
+              </div>
+            </div>
+          </div>
+        </nz-card>
+
+        <!-- Date Ribbon Strip -->
+        <div class="date-strip-container">
+          <h4 class="strip-title"><span nz-icon nzType="calendar" nzTheme="outline"></span> Select Date</h4>
+          <div class="date-ribbon">
+            <div 
+              *ngFor="let d of dates; let idx = index" 
+              class="date-ribbon-item"
+              [class.active-date]="idx === selectedDateIndex"
+              [class.off-day]="!d.isWorkingDay"
+              (click)="selectDate(idx)"
+            >
+              <span class="day-name-short">{{ d.dayName.substring(0, 3) }}</span>
+              <span class="date-num">{{ d.formattedDate }}</span>
+              <span class="status-dot" *ngIf="d.isWorkingDay" nz-tooltip nzTooltipTitle="Working Day"></span>
+              <span class="off-badge" *ngIf="!d.isWorkingDay">Off</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bookings List Area -->
+        <nz-card [nzBordered]="false" class="bookings-list-card">
+          <div class="bookings-list-header">
+            <h3 nz-typography class="list-title">
+              Bookings for {{ dates[selectedDateIndex]?.dayName }}, {{ dates[selectedDateIndex]?.formattedDate }}
+            </h3>
+            <nz-tag nzColor="success" *ngIf="dates[selectedDateIndex]?.isWorkingDay">Active Shift</nz-tag>
+            <nz-tag nzColor="error" *ngIf="!dates[selectedDateIndex]?.isWorkingDay">Clinic Off Duty</nz-tag>
+          </div>
+          <nz-divider class="list-divider"></nz-divider>
+
+          <!-- Off Day Banner -->
+          <div *ngIf="!dates[selectedDateIndex]?.isWorkingDay" class="off-day-message">
+            <nz-alert
+              nzType="info"
+              nzMessage="Doctor is Off Today"
+              nzDescription="No consultation hours are scheduled for this doctor on this day of the week. Patients cannot book appointments."
+              nzShowIcon
+            >
+            </nz-alert>
+          </div>
+
+          <!-- Active Shift Bookings -->
+          <div *ngIf="dates[selectedDateIndex]?.isWorkingDay">
+            
+            <div *ngIf="bookings.length === 0" class="no-slots-message">
+              <p>No slots generated for this shift range.</p>
+            </div>
+
+            <div class="bookings-timeline" *ngIf="bookings.length > 0">
+              <div 
+                *ngFor="let booking of bookings" 
+                class="timeline-slot-item"
+                [class.slot-booked]="booking.isBooked"
+                [class.slot-available]="!booking.isBooked"
+                [class.slot-checked-in]="booking.status === 'Checked-in'"
+                [class.slot-cancelled]="booking.status === 'Cancelled'"
+                [class.slot-completed]="booking.status === 'Completed'"
+              >
+                <!-- Time Badge -->
+                <div class="slot-time">
+                  <span nz-icon nzType="clock-circle" nzTheme="outline"></span>
+                  {{ booking.time }}
+                </div>
+
+                <!-- Content Area -->
+                <div class="slot-content">
+                  <!-- Available Slot -->
+                  <div *ngIf="!booking.isBooked" class="available-info">
+                    <nz-tag nzColor="success">Available</nz-tag>
+                    <span class="slot-placeholder-text">No active appointments booked for this slot.</span>
+                  </div>
+
+                  <!-- Booked Slot Details -->
+                  <div *ngIf="booking.isBooked" class="patient-details-box">
+                    <div class="patient-primary">
+                      <span class="patient-name">
+                        <span nz-icon nzType="user" nzTheme="outline"></span> {{ booking.patientName }}
+                      </span>
+
+                      <!-- Status tags -->
+                      <nz-tag [nzColor]="'orange'" *ngIf="booking.status === 'Confirmed'">Confirmed</nz-tag>
+                      <nz-tag [nzColor]="'blue'" *ngIf="booking.status === 'Checked-in'">Checked In</nz-tag>
+                      <nz-tag [nzColor]="'green'" *ngIf="booking.status === 'Completed'">Completed</nz-tag>
+                      <nz-tag [nzColor]="'red'" *ngIf="booking.status === 'Cancelled'">Cancelled</nz-tag>
+                    </div>
+
+                    <div class="patient-secondary">
+                      <span class="contact-detail"><span nz-icon nzType="phone" nzTheme="outline"></span> {{ booking.patientPhone }}</span>
+                      <span class="contact-detail"><span nz-icon nzType="mail" nzTheme="outline"></span> {{ booking.patientEmail }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </nz-card>
+        
+      </div>
+
+      <!-- Fallback when no doctor is loaded -->
+      <ng-template #noDoctorSelected>
+        <nz-card [nzBordered]="false" class="empty-state-card">
+          <div class="empty-content">
+            <span nz-icon nzType="user" nzTheme="outline" class="empty-icon"></span>
+            <h3>No Doctor Selected</h3>
+            <p>Please select a doctor from the left roster list to manage their schedule and bookings.</p>
+          </div>
+        </nz-card>
+      </ng-template>
+    </div>
+  </div>
+</div>
