@@ -1,3 +1,21 @@
+<nz-alert
+  *ngIf="successMessage"
+  nzType="success"
+  [nzMessage]="successMessage"
+  nzShowIcon
+  nzCloseable
+  (nzOnClose)="successMessage = ''">
+</nz-alert>
+
+<nz-alert
+  *ngIf="errorMessage"
+  nzType="error"
+  [nzMessage]="errorMessage"
+  nzShowIcon
+  nzCloseable
+  (nzOnClose)="errorMessage = ''">
+</nz-alert>
+
 <form nz-form [formGroup]="validateForm" class="register-form" (ngSubmit)="submitForm()">
     <nz-form-item>
         <nz-form-control nzErrorTip="Enter Your Name">
@@ -34,7 +52,7 @@
 
     <div nz-row class="register-form-margin">
         <button nz-button class="register-form-button register-form-margin" nzType="primary"
-            [disabled]="validateForm.invalid" [nzLoading]="loading">Register</button>
+            [disabled]="validateForm.invalid || loading" [nzLoading]="loading">Register</button>
         Or &nbsp;
         <a routerLink="/login">
             Login
