@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzDropdownModule } from 'ng-zorro-antd/dropdown';
 import { CommonModule } from '@angular/common';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
     RouterLink,
     RouterLinkActive,
     NzLayoutModule,
-    NzMenuModule, 
+    NzMenuModule,
     NzDropdownModule,
     NzAvatarModule
   ],
@@ -22,14 +23,26 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
   styleUrl: './app.css'
 })
 export class App {
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   protected readonly title = signal('frontend');
-  userName = 'Patient';
-  isLoggedIn = true;
+
+  get isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
+
+  get userName() {
+    return this.authService.currentUser()?.userName || 'User';
+  }
+
+  get userRole() {
+    return this.authService.currentUser()?.role;
+  }
 
   logout() {
-  this.isLoggedIn = false;
-  console.log('Logged out');
-}
-  
+    this.authService.logout();
+    this.router.navigate(['/login']);
+    console.log('Logged out');
+  }
 }

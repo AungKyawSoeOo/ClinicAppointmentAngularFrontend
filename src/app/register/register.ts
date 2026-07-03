@@ -31,6 +31,7 @@ import { Router } from '@angular/router';
   styleUrl: './register.css',
 })
 export class Register {
+  constructor(private msg: NzMessageService) { }
   loading = false;
   private fb = inject(NonNullableFormBuilder);
   private authService = inject(AuthService);
@@ -81,6 +82,7 @@ export class Register {
         .subscribe({
           next: (res: any) => {
             this.successMessage = res.message;
+            this.msg.success(this.successMessage);
             // Wait 2 seconds, then redirect
             setTimeout(() => {
               this.router.navigate(['/login']);
@@ -88,6 +90,8 @@ export class Register {
           },
           error: (err: any) => {
             this.errorMessage = err;
+            this.msg.error(this.errorMessage);
+
           }
         });
     }

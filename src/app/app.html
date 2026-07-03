@@ -1,78 +1,85 @@
 <nz-layout>
   <nz-header>
-  <!-- LEFT LOGO -->
-  <div class="logo">
-    <a routerLink="/" style="color:white;">
-      Clinic System
-    </a>
-  </div>
-
-  <ul nz-menu nzTheme="dark" nzMode="horizontal">
-    <li nz-menu-item routerLink="/" routerLinkActive="ant-menu-item-selected" [routerLinkActiveOptions]="{ exact: true }">
-      Home
-    </li>
-
-    <li nz-menu-item routerLink="/clinics" routerLinkActive="ant-menu-item-selected">
-      Clinics
-    </li>
-
-    <li nz-menu-item routerLink="/clinic/1/doctors-list" routerLinkActive="ant-menu-item-selected">
-      Doctors List (Clinic)
-    </li>
-
-    <li nz-menu-item routerLink="/clinic/doctors/add" routerLinkActive="ant-menu-item-selected">
-      Add Doctor (Clinic)
-    </li>
-  </ul>
-
-
-  <div class="user-area">
-    <div *ngIf="isLoggedIn">
-
-      <a nz-dropdown [nzDropdownMenu]="userMenu" class="avatar-btn">
-
-        <nz-avatar nzIcon="user" style="background-color:#87d068;"></nz-avatar>
-
-        <span style="color:white; margin-left:8px;">
-          {{ userName }}
-        </span>
-
+    <!-- LEFT LOGO -->
+    <div class="logo">
+      <a routerLink="/" style="color:white;">
+        Clinic System
       </a>
-
-      <nz-dropdown-menu #userMenu="nzDropdownMenu">
-        <ul nz-menu>
-
-          <li nz-menu-item routerLink="/profile">
-            Profile
-          </li>
-
-          <li nz-menu-item routerLink="/my-bookings">
-            My Bookings
-          </li>
-
-          <li nz-menu-divider></li>
-
-          <li nz-menu-item (click)="logout()">
-            Logout
-          </li>
-
-        </ul>
-      </nz-dropdown-menu>
-
     </div>
 
-    <div *ngIf="!isLoggedIn" style="color:white;">
-      <a routerLink="/login" style="color:white; margin-right: 10px;">Login</a>
-      <!-- <a routerLink="/register" style="color:white; margin-right: 10px;">Register</a> -->
-    </div>
+    <ul nz-menu nzTheme="dark" nzMode="horizontal">
+      <li nz-menu-item routerLink="/" routerLinkActive="ant-menu-item-selected"
+        [routerLinkActiveOptions]="{ exact: true }">
+        Home
+      </li>
 
-  </div>
-</nz-header>
+      <li nz-menu-item routerLink="/clinics" routerLinkActive="ant-menu-item-selected">
+        Clinics
+      </li>
+      <ng-container *ngIf="userRole == 'clinic'">
+        <li nz-menu-item routerLink="/clinic/1/doctors-list" routerLinkActive="ant-menu-item-selected">
+          Doctors List (Clinic)
+        </li>
+
+        <li nz-menu-item routerLink="/clinic/doctors/add" routerLinkActive="ant-menu-item-selected">
+          Add Doctor (Clinic)
+        </li>
+      </ng-container>
+
+      <li nz-menu-item *ngIf="userRole === 'patient'" routerLink="/my-bookings"
+        routerLinkActive="ant-menu-item-selected">
+        My Bookings
+      </li>
+    </ul>
+
+
+    <div class="user-area">
+      <div *ngIf="isLoggedIn">
+
+        <a nz-dropdown [nzDropdownMenu]="userMenu" class="avatar-btn">
+
+          <nz-avatar nzIcon="user" style="background-color:#87d068;"></nz-avatar>
+
+          <span style="color:white; margin-left:8px;">
+            {{ userName }}
+          </span>
+
+        </a>
+
+        <nz-dropdown-menu #userMenu="nzDropdownMenu">
+          <ul nz-menu>
+
+            <li nz-menu-item routerLink="/profile">
+              Profile
+            </li>
+
+            <li nz-menu-item routerLink="/my-bookings">
+              My Bookings
+            </li>
+
+            <li nz-menu-divider></li>
+
+            <li nz-menu-item (click)="logout()">
+              Logout
+            </li>
+
+          </ul>
+        </nz-dropdown-menu>
+
+      </div>
+
+      <div *ngIf="!isLoggedIn" style="color:white;">
+        <a routerLink="/login" style="color:white; margin-right: 10px;">Login</a>
+        <!-- <a routerLink="/register" style="color:white; margin-right: 10px;">Register</a> -->
+      </div>
+
+    </div>
+  </nz-header>
 
   <nz-content style="padding: 24px">
     <router-outlet></router-outlet>
   </nz-content>
-  
+
   <nz-footer style="text-align:center">
     © 2026 Clinic Booking System
   </nz-footer>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -11,6 +11,8 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-myprofile',
@@ -33,29 +35,70 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 export class Myprofile implements OnInit {
   profileForm!: FormGroup;
   isEditMode = false;
+  loading = false;
 
-  // Mock patient data based on DB schema
-  patientData = {
-    patient_id: 1,
-    user_id: 101,
-    email: 'patient@example.com',
-    full_name: 'John Doe',
-    phone: '+95912345678',
-    gender: 'Male',
-    dob: new Date('1990-05-15'),
+  // Active session and profile data
+  userId: number | null = null;
+  patientData: any = {
+    patient_id: 0,
+    user_id: 0,
+    email: '',
+    full_name: '',
+    phone: '',
+    gender: '',
+    dob: null,
     status: 'Active',
-    created_at: new Date('2025-01-01T10:00:00Z')
+    created_at: new Date()
   };
+
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   constructor(private fb: FormBuilder, private message: NzMessageService) {}
 
   ngOnInit(): void {
+    const user = this.authService.currentUser();
+    if (!user) {
+      this.message.error('Please log in to view your profile.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.userId = user.userId;
+
     this.profileForm = this.fb.group({
-      full_name: [{ value: this.patientData.full_name, disabled: true }, [Validators.required]],
-      phone: [{ value: this.patientData.phone, disabled: true }, [Validators.required]],
-      gender: [{ value: this.patientData.gender, disabled: true }, [Validators.required]],
-      dob: [{ value: this.patientData.dob, disabled: true }, [Validators.required]],
-      email: [{ value: this.patientData.email, disabled: true }] // Usually read-only
+      full_name: [{ value: '', disabled: true }, [Validators.required]],
+      phone: [{ value: '', disabled: true }, [Validators.required]],
+      gender: [{ value: '', disabled: true }, [Validators.required]],
+      dob: [{ value: null, disabled: true }, [Validators.required]],
+      email: [{ value: user.email || '', disabled: true }] // Read-only
+    });
+
+    this.fetchProfile();
+  }
+
+  fetchProfile(): void {
+    if (!this.userId) return;
+    this.loading = true;
+    this.authService.getProfile(this.userId).subscribe({
+      next: (response) => {
+        this.loading = false;
+        if (response && response.result && response.data) {
+          this.patientData = response.data;
+
+          this.profileForm.patchValue({
+            full_name: this.patientData.full_name || '',
+            phone: this.patientData.phone || '',
+            gender: this.patientData.gender || '',
+            dob: this.patientData.dob ? new Date(this.patientData.dob) : null,
+            email: this.patientData.email || ''
+          });
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        this.message.error(typeof err === 'string' ? err : 'Error loading profile data');
+      }
     });
   }
 
@@ -69,10 +112,10 @@ export class Myprofile implements OnInit {
     } else {
       // Cancel edit: reset to original values and disable
       this.profileForm.patchValue({
-        full_name: this.patientData.full_name,
-        phone: this.patientData.phone,
-        gender: this.patientData.gender,
-        dob: this.patientData.dob
+        full_name: this.patientData.full_name || '',
+        phone: this.patientData.phone || '',
+        gender: this.patientData.gender || '',
+        dob: this.patientData.dob ? new Date(this.patientData.dob) : null
       });
       this.profileForm.get('full_name')?.disable();
       this.profileForm.get('phone')?.disable();
@@ -82,20 +125,36 @@ export class Myprofile implements OnInit {
   }
 
   saveProfile(): void {
-    if (this.profileForm.valid) {
-      // In a real app, an API call here
+    if (this.profileForm.valid && this.userId) {
+      this.loading = true;
       const updatedValues = this.profileForm.getRawValue();
-      this.patientData.full_name = updatedValues.full_name;
-      this.patientData.phone = updatedValues.phone;
-      this.patientData.gender = updatedValues.gender;
-      this.patientData.dob = updatedValues.dob;
-      this.message.success('Profile updated successfully!');
 
-      this.isEditMode = false;
-      this.profileForm.get('full_name')?.disable();
-      this.profileForm.get('phone')?.disable();
-      this.profileForm.get('gender')?.disable();
-      this.profileForm.get('dob')?.disable();
+      this.authService.updateProfile(this.userId, updatedValues).subscribe({
+        next: (response) => {
+          this.loading = false;
+          if (response && response.result) {
+            // Update local memory
+            this.patientData.full_name = updatedValues.full_name;
+            this.patientData.phone = updatedValues.phone;
+            this.patientData.gender = updatedValues.gender;
+            this.patientData.dob = updatedValues.dob;
+
+            // Sync user name with header session Signal
+            this.authService.updateCurrentUserName(updatedValues.full_name);
+
+            this.message.success('Profile updated successfully!');
+            this.isEditMode = false;
+            this.profileForm.get('full_name')?.disable();
+            this.profileForm.get('phone')?.disable();
+            this.profileForm.get('gender')?.disable();
+            this.profileForm.get('dob')?.disable();
+          }
+        },
+        error: (err) => {
+          this.loading = false;
+          this.message.error(typeof err === 'string' ? err : 'Error saving profile data');
+        }
+      });
     } else {
       Object.values(this.profileForm.controls).forEach(control => {
         if (control.invalid) {

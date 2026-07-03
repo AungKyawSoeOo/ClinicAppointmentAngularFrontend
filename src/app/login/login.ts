@@ -1,13 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import {RouterLink} from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,16 +16,13 @@ import {RouterLink} from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login {
-isLoggedIn = false;
-userName = 'Patient';
-
-logout() {
-  this.isLoggedIn = false;
-  console.log('Logged out');
-}
   constructor(private msg: NzMessageService) { }
   loading = false;
   private fb = inject(NonNullableFormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+
   validateForm = this.fb.group({
     email: this.fb.control('', [Validators.required, Validators.email]),
     password: this.fb.control('', [Validators.required]),
@@ -33,27 +30,36 @@ logout() {
   });
 
   submitForm(): void {
-    if (this.validateForm.valid) {
-      this.loading = true;
-
-      console.log('submit', this.validateForm.value);
-
-      setTimeout(() => {
-        this.loading = false;
-        this.msg.success('Login successful');
-
-        this.validateForm.reset({
-          email: '',
-          password: '',
-          remember: true
-        });
-      }, 1000);
-    } else {
+    if (this.validateForm.invalid) {
+      // Mark all fields as dirty/touched if invalid
       Object.values(this.validateForm.controls).forEach(control => {
         control.markAsDirty();
         control.markAsTouched();
         control.updateValueAndValidity({ onlySelf: true });
       });
+      return;
     }
+
+    this.loading = true;
+
+    this.authService.loginUser(this.validateForm.value).subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.msg.success('Login successful');
+        this.cdr.detectChanges();
+        this.validateForm.reset({
+          remember: true
+        });
+
+        // Navigate to home page
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.cdr.detectChanges();
+        const errorMessage = typeof err === 'string' ? err : 'Invalid Credentials. Please try again.';
+        this.msg.error(errorMessage);
+      }
+    });
   }
 }
