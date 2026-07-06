@@ -18,11 +18,11 @@
       </li>
       <ng-container *ngIf="userRole == 'clinic'">
         <li nz-menu-item routerLink="/clinic/1/doctors-list" routerLinkActive="ant-menu-item-selected">
-          Doctors List (Clinic)
+          Doctors List
         </li>
 
         <li nz-menu-item routerLink="/clinic/doctors/add" routerLinkActive="ant-menu-item-selected">
-          Add Doctor (Clinic)
+          Add Doctor
         </li>
       </ng-container>
 
@@ -57,8 +57,16 @@
         <nz-dropdown-menu #userMenu="nzDropdownMenu">
           <ul nz-menu>
 
-            <li nz-menu-item routerLink="/profile" routerLinkActive="ant-menu-item-selected">
+            <li nz-menu-item *ngIf="userRole !== 'clinic'" routerLink="/profile" routerLinkActive="ant-menu-item-selected">
               Profile
+            </li>
+
+            <li nz-menu-item *ngIf="userRole === 'clinic'" routerLink="/clinic/1/doctors-list" routerLinkActive="ant-menu-item-selected">
+              Doctor List
+            </li>
+
+            <li nz-menu-item *ngIf="userRole === 'clinic'" routerLink="/clinic/doctors/add" routerLinkActive="ant-menu-item-selected">
+              Add Doctor
             </li>
 
              <li nz-menu-item *ngIf="userRole === 'admin'" routerLink="/admin/location-setup" routerLinkActive="ant-menu-item-selected">

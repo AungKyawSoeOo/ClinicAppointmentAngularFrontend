@@ -10,7 +10,8 @@
         <tr>
           <th>Clinic Name</th>
           <th>Liscense Number</th>
-          <th>Location</th>
+          <th>Liscense Photo</th>
+          <th>Address</th>
           <th>Registered Date</th>
           <th>Status</th>
           <th>Action</th>
@@ -20,12 +21,16 @@
         <tr *ngFor="let data of basicTable.data">
           <td><strong>{{ data.name }}</strong></td>
           <td>{{ data.liscense_number }}</td>
+          <td>
+            <img nz-image width="80px" [nzSrc]="'http://localhost:3000/uploads/' + data.license_photo" alt="License" *ngIf="data.license_photo" />
+            <span *ngIf="!data.license_photo">No Photo</span>
+          </td>
           <td>{{ data.location }}</td>
           <td>{{ data.registeredDate }}</td>
           <td>
             <nz-tag
-              [nzColor]="data.status === 'Approved' ? 'success' : data.status === 'Rejected' ? 'error' : 'warning'">
-              {{ data.status }}
+              [nzColor]="data.status === 'active' ? 'success' : data.status === 'inactive' ? 'error' : 'warning'">
+              {{ data.status === 'active' ? 'Approved' : data.status === 'inactive' ? 'Rejected' : 'Pending' }}
             </nz-tag>
           </td>
           <td>
