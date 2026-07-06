@@ -10,6 +10,7 @@ import { MyBookings } from './my-bookings/my-bookings';
 import { Myprofile } from './myprofile/myprofile';
 import { AdminClinics } from './admin/admin-clinics/admin-clinics';
 import { AdminMasterSetup } from './admin/admin-master-setup/admin-master-setup';
+import { adminGuard } from './guards/admin.guard';
 import { DoctorsAdd } from './doctors-add/doctors-add';
 import { ClinicDoctorsList } from './clinic-doctors-list/clinic-doctors-list';
 
@@ -23,8 +24,8 @@ export const routes: Routes = [
     { path: 'clinics/:clinicId/doctors/:doctorId/appointment', component: DoctorsAppointment },
     { path: 'my-bookings', component: MyBookings },
     { path: 'profile', component: Myprofile },
-    { path: 'admin/clinics', component: AdminClinics },
-    { path: 'admin/location-setup', component: AdminMasterSetup },
+    { path: 'admin/clinics', component: AdminClinics, canActivate: [adminGuard] },
+    { path: 'admin/location-setup', component: AdminMasterSetup, canActivate: [adminGuard] },
     { path: 'clinic/doctors/add', component: DoctorsAdd },
     { path: 'clinic/:clinicId/doctors-list', component: ClinicDoctorsList },
     { path: '**', redirectTo: '' }

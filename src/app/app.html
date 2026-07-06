@@ -26,12 +26,20 @@
         </li>
       </ng-container>
 
+      <ng-container *ngIf="userRole === 'admin'">
+        <li nz-menu-item routerLink="/admin/clinics" routerLinkActive="ant-menu-item-selected">
+          Clinics Mangement
+        </li>
+        <li nz-menu-item routerLink="/admin/location-setup" routerLinkActive="ant-menu-item-selected">
+          Location Setup
+        </li>
+      </ng-container>
+
       <li nz-menu-item *ngIf="userRole === 'patient'" routerLink="/my-bookings"
         routerLinkActive="ant-menu-item-selected">
         My Bookings
       </li>
     </ul>
-
 
     <div class="user-area">
       <div *ngIf="isLoggedIn">
@@ -49,11 +57,15 @@
         <nz-dropdown-menu #userMenu="nzDropdownMenu">
           <ul nz-menu>
 
-            <li nz-menu-item routerLink="/profile">
+            <li nz-menu-item routerLink="/profile" routerLinkActive="ant-menu-item-selected">
               Profile
             </li>
 
-            <li nz-menu-item routerLink="/my-bookings">
+             <li nz-menu-item *ngIf="userRole === 'admin'" routerLink="/admin/location-setup" routerLinkActive="ant-menu-item-selected">
+              Location setup
+            </li>
+
+            <li nz-menu-item *ngIf="userRole === 'patient'" routerLink="/my-bookings" routerLinkActive="ant-menu-item-selected">
               My Bookings
             </li>
 

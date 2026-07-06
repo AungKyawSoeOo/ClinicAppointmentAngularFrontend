@@ -13,14 +13,14 @@
             <span nz-icon nzType="plus"></span> Add New City
           </button>
           <nz-input-group [nzPrefix]="prefixIconSearch" class="search-input">
-            <input type="text" nz-input placeholder="Search cities..." />
+            <input type="text" nz-input placeholder="Search cities..." [(ngModel)]="citySearchTerm" (input)="onCitySearch()" />
           </nz-input-group>
           <ng-template #prefixIconSearch>
             <span nz-icon nzType="search"></span>
           </ng-template>
         </div>
 
-        <nz-table #cityTable [nzData]="cities" [nzPageSize]="10">
+        <nz-table #cityTable [nzData]="filteredCities" [nzPageSize]="10">
           <thead>
             <tr>
               <th>ID</th>
@@ -56,14 +56,14 @@
             <span nz-icon nzType="plus"></span> Add New Township
           </button>
           <nz-input-group [nzPrefix]="prefixIconSearchTownship" class="search-input">
-            <input type="text" nz-input placeholder="Search townships..." />
+            <input type="text" nz-input placeholder="Search townships..." [(ngModel)]="townshipSearchTerm" (input)="onTownshipSearch()"/>
           </nz-input-group>
           <ng-template #prefixIconSearchTownship>
             <span nz-icon nzType="search"></span>
           </ng-template>
         </div>
 
-        <nz-table #townshipTable [nzData]="townships" [nzPageSize]="10">
+        <nz-table #townshipTable [nzData]="filteredTownships" [nzPageSize]="10">
           <thead>
             <tr>
               <th>ID</th>
