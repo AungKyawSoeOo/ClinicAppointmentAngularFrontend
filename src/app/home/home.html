@@ -37,15 +37,24 @@
      <p class="section-subtitle">Find and book appointments from available clinics.</p>
 
     <div nz-row [nzGutter]="[24, 24]">
-      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" *ngFor="let clinic of clinics">
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" *ngFor="let clinic of homeClinics">
         <nz-card nzHoverable class="specialty-card">
           <div class="specialty-content">
             <span nz-icon nzType="medicine-box" nzTheme="outline" class="specialty-icon"></span>
             <h4 nz-typography>{{ clinic.name }}</h4>
-            <p nz-typography nzType="secondary">{{ clinic.address }}</p>
-            <p nz-typography nzType="secondary">
-              {{ clinic.city }}
-            </p>
+            <nz-divider class="card-divider"></nz-divider>
+            <div class="location-container">
+              <p class="location-item">
+                <span nz-icon nzType="environment" nzTheme="outline"></span>
+                <span class="location-text">
+                  {{ clinic.city }}{{ clinic.township ? ', ' + clinic.township : '' }}
+                </span>
+              </p>
+              <p class="location-item secondary-text">
+                <span nz-icon nzType="home" nzTheme="outline"></span>
+                <span class="location-text">{{ clinic.location }}</span>
+              </p>
+            </div>
           </div>
         </nz-card>
       </div>

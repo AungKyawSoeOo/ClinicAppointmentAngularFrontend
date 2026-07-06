@@ -2,14 +2,18 @@
     <h2 nz-typography class="section-title">All Clinics</h2>
     <p class="section-subtitle">Browse clinics to view available clinics</p>
     <div class="location-filter">
-    <nz-select nzPlaceHolder="City" style="width: 30%;">
-        <nz-option nzValue="Yangon" nzLabel="Yangon" />
-        <nz-option nzValue="Mandalay" nzLabel="Mandalay" />
-    </nz-select>
-    <nz-select nzPlaceHolder="Township" style="width: 30%;">
-        <nz-option nzValue="Tamwe" nzLabel="Tamwe" />
-        <nz-option nzValue="Tarkayta" nzLabel="Tarkayta" />
-    </nz-select>
+        <nz-select [(ngModel)]="selectedCityId" nzPlaceHolder="City" style="width: 30%;" nzAllowClear
+            (ngModelChange)="onCityChange($event)">
+            @for (city of cities; track city.id) {
+            <nz-option [nzValue]="city.id" [nzLabel]="city.name" />
+            }
+        </nz-select>
+        <nz-select [(ngModel)]="selectedTownshipId" nzPlaceHolder="Township" [nzDisabled]="!selectedCityId"
+            style="width: 30%;" nzAllowClear (ngModelChange)="onTownshipChange()">
+            @for (township of filteredTownships; track township.id) {
+            <nz-option [nzValue]="township.id" [nzLabel]="township.name" />
+            }
+        </nz-select>
     </div>
     <div nz-row [nzGutter]="[24, 24]">
         <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" *ngFor="let clinic of clinics">
@@ -17,10 +21,19 @@
                 <div class="specialty-content">
                     <span nz-icon nzType="medicine-box" nzTheme="outline" class="specialty-icon"></span>
                     <h4 nz-typography>{{ clinic.name }}</h4>
-                    <p nz-typography nzType="secondary">{{ clinic.address }}</p>
-                    <p nz-typography nzType="secondary">
-                        {{ clinic.city }}
-                    </p>
+                    <nz-divider class="card-divider"></nz-divider>
+                    <div class="location-container">
+                        <p class="location-item">
+                            <span nz-icon nzType="environment" nzTheme="outline"></span>
+                            <span class="location-text">
+                                {{ clinic.city }}{{ clinic.township ? ', ' + clinic.township : '' }}
+                            </span>
+                        </p>
+                        <p class="location-item secondary-text">
+                            <span nz-icon nzType="home" nzTheme="outline"></span>
+                            <span class="location-text">{{ clinic.location }}</span>
+                        </p>
+                    </div>
                 </div>
             </nz-card>
         </div>

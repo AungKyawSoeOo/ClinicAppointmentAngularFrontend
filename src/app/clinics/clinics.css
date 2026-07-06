@@ -32,3 +32,33 @@
     gap: 16px;
     margin-bottom: 12px;
 }
+
+.clinic-title {
+  margin-bottom: 0 !important;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.card-divider {
+  margin: 12px 0;
+}
+
+.location-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.location-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto !important;
+  font-size: 0.9rem;
+  color: #595959;
+}
+
+.secondary-text {
+  font-size: 0.85rem;
+  color: #8c8c8c;
+}

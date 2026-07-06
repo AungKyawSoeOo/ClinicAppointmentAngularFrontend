@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit  } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -8,6 +8,20 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { NzMessageService } from 'ng-zorro-antd/message';
+
+interface Clinic {
+  id: number;
+  name: string;
+  liscense_number: string;
+  license_photo: string;
+  location: string;
+  city: string;
+  township: string;
+  registeredDate: string;
+  status: string; // 'pending' | 'active' | 'inactive'
+}
 
 @Component({
   selector: 'app-home',
@@ -25,24 +39,40 @@ import { CommonModule } from '@angular/common';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {
-  clinics = [
-    {
-      name: 'City Care Clinic',
-      address: 'No. 12, Main Road',
-      city: 'Yangon'
-    },
-    {
-      name: 'ABC Medical Center',
-      address: 'Street 5, Downtown',
-      city: 'Yangon'
-    },
-    {
-      name: 'Sunshine Health Clinic',
-      address: 'West District',
-      city: 'Mandalay'
-    }
-  ];
+export class Home implements OnInit {
+  allClinics: Clinic[] = [];
+  clinics: Clinic[] = [];
+  apiUrl = 'http://localhost:3000/api/clinics';
+  constructor(
+    private http: HttpClient,
+    private message: NzMessageService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.fetchClinics();
+  }
+
+   fetchClinics(): void {
+    this.http.get<{result: boolean, data: Clinic[]}>(this.apiUrl).subscribe({
+      next: (res) => {
+        if (res.result) {
+          this.clinics = [...res.data];
+          this.cdr.detectChanges();
+        } else {
+          this.message.error('Failed to load clinics');
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.message.error('Error fetching clinics');
+      }
+    });
+  }
+
+  get homeClinics(): Clinic[] {
+    return this.clinics.slice(0, 3);
+  }
 
   steps = [
     { title: 'Search', icon: 'search', description: 'Find clinics by location near you.' },
