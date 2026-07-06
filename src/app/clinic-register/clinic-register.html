@@ -48,21 +48,23 @@
             </ng-template>
         </nz-form-control>
     </nz-form-item>
-    
+
     <nz-form-item>
-        <nz-form-control>
-            <nz-select nzPlaceHolder="City" style="width: 100%;">
-                <nz-option nzValue="Yangon" nzLabel="Yangon" />
-                <nz-option nzValue="Mandalay" nzLabel="Mandalay" />
+        <nz-form-control nzErrorTip="Please select a city">
+            <nz-select formControlName="city_id" nzPlaceHolder="City" style="width: 100%;" (ngModelChange)="onCityChange($event)">
+                @for (city of cities; track city.id) {
+                    <nz-option [nzValue]="city.id" [nzLabel]="city.name" />
+                }
             </nz-select>
         </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-        <nz-form-control>
-            <nz-select nzPlaceHolder="Township" style="width: 100%;">
-                <nz-option nzValue="Tamwe" nzLabel="Tamwe" />
-                <nz-option nzValue="Tarkayta" nzLabel="Tarkayta" />
+        <nz-form-control nzErrorTip="Please select a township">
+            <nz-select formControlName="township_id" nzPlaceHolder="Township" style="width: 100%;" [nzDisabled]="!validateForm.get('city_id')?.value">
+                @for (township of filteredTownships; track township.id) {
+                    <nz-option [nzValue]="township.id" [nzLabel]="township.name" />
+                }
             </nz-select>
         </nz-form-control>
     </nz-form-item>
@@ -84,17 +86,15 @@
             </nz-input-wrapper>
         </nz-form-control>
     </nz-form-item>
-    
+
     <nz-form-item>
         <nz-upload nzAction="" (nzChange)="handleChange($event)" [(nzFileList)]="fileList" [nzLimit]="1">
-            <button nz-button>
+            <button nz-button type="button">
                 <nz-icon nzType="upload" />
                 Liscense Photo
             </button>
         </nz-upload>
     </nz-form-item>
-
-
 
     <div nz-row class="register-form-margin">
         <button nz-button class="clinic-register-form-button clinic-register-form-button" nzType="primary"

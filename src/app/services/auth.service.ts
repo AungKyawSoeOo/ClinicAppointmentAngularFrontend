@@ -8,6 +8,7 @@ export interface User {
   role: string;
   email?: string;
   userName?: string;
+  status?: string;
 }
 
 @Injectable({
@@ -48,6 +49,16 @@ export class AuthService {
     );
   }
 
+  registerClinic(clinicData: any) {
+    return this.http.post(`${this.baseUrl}/register-clinic`, clinicData).pipe(
+      catchError((error) => {
+        console.log("Raw error from server:", error);
+        const errMsg = error.error?.message || 'An unexpected error occurred';
+        return throwError(() => errMsg);
+      })
+    );
+  }
+
   loginUser(userData: any) {
     return this.http.post<any>(`${this.baseUrl}/login`, userData).pipe(
       tap((res) => {
@@ -56,7 +67,8 @@ export class AuthService {
             userId: res.userId,
             role: res.role,
             email: userData.email,
-            userName: res.userName || 'Patient'
+            userName: res.userName || 'Patient',
+            status: res.status
           };
           if (typeof window !== 'undefined' && window.localStorage) {
             localStorage.setItem('currentUser', JSON.stringify(user));
