@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -42,6 +44,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 export class DoctorsAdd implements OnInit {
   doctorForm!: FormGroup;
   loading = false;
+  clinicId: string | null = null;
 
   specializationOptions = [
     'General Practitioner',
@@ -69,10 +72,21 @@ export class DoctorsAdd implements OnInit {
   constructor(
     private fb: FormBuilder,
     private message: NzMessageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.clinicId = this.route.snapshot.paramMap.get('clinicId');
+    if (!this.clinicId) {
+      const user = this.authService.currentUser();
+      if (user && user.clinicId) {
+        this.clinicId = user.clinicId.toString();
+      }
+    }
+
     this.doctorForm = this.fb.group({
       doctor_name: ['', [Validators.required, Validators.maxLength(100)]],
       doctor_license_no: ['', [Validators.required, Validators.maxLength(100)]],
@@ -80,7 +94,6 @@ export class DoctorsAdd implements OnInit {
       experience: ['', [Validators.required, Validators.min(0), Validators.max(60)]],
       phone: ['', [Validators.required, Validators.pattern(/^(01|09|\+959)\d{7,10}$/)]],
       consultation_duration: [15, [Validators.required, Validators.min(5), Validators.max(120)]],
-      max_capacity_per_slot: [1, [Validators.required, Validators.min(1), Validators.max(20)]],
       working_days: [[], [Validators.required]],
       start_time: [null, [Validators.required]],
       end_time: [null, [Validators.required]]
@@ -104,28 +117,40 @@ export class DoctorsAdd implements OnInit {
   submitForm(): void {
     if (this.doctorForm.valid) {
       this.loading = true;
-      console.log('Submitting Doctor Form Data:', this.doctorForm.value);
+      const formData = {
+        clinic_id: this.clinicId ? parseInt(this.clinicId, 10) : null,
+        ...this.doctorForm.value,
+        start_time: this.doctorForm.value.start_time ? this.formatTime(this.doctorForm.value.start_time) : null,
+        end_time: this.doctorForm.value.end_time ? this.formatTime(this.doctorForm.value.end_time) : null,
+      };
 
-      setTimeout(() => {
-        this.loading = false;
-        this.message.success('Doctor added successfully!');
-
-        // Navigate to the clinic doctor list page
-        this.router.navigate(['/clinic/1/doctors-list']);
-
-        this.doctorForm.reset({
-          doctor_name: '',
-          doctor_license_no: '',
-          specialization: '',
-          experience: '',
-          phone: '',
-          consultation_duration: 15,
-          max_capacity_per_slot: 1,
-          working_days: [],
-          start_time: null,
-          end_time: null
-        });
-      }, 1000);
+      this.http.post('http://localhost:3000/api/doctors', formData).subscribe({
+        next: (res: any) => {
+          this.loading = false;
+          if (res.result) {
+            this.message.success('Doctor added successfully! Timeslots generated.');
+            this.router.navigate([`/clinic/${this.clinicId}/doctors-list`]);
+            this.doctorForm.reset({
+              doctor_name: '',
+              doctor_license_no: '',
+              specialization: '',
+              experience: '',
+              phone: '',
+              consultation_duration: 15,
+              working_days: [],
+              start_time: null,
+              end_time: null
+            });
+          } else {
+            this.message.error(res.message || 'Failed to add doctor');
+          }
+        },
+        error: (err) => {
+          this.loading = false;
+          console.error('Error adding doctor:', err);
+          this.message.error('An error occurred while adding the doctor');
+        }
+      });
     } else {
       Object.values(this.doctorForm.controls).forEach(control => {
         if (control.invalid) {
@@ -135,5 +160,10 @@ export class DoctorsAdd implements OnInit {
       });
       this.message.error('Please fill in all required fields correctly.');
     }
+  }
+
+  formatTime(dateObj: Date): string {
+    const pad = (n: number) => n < 10 ? '0' + n : n;
+    return `${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}:00`;
   }
 }

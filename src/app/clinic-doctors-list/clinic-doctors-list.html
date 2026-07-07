@@ -33,11 +33,11 @@
             <h4 class="doc-name">{{ doctor.name }}</h4>
             <div class="doc-specialty-wrapper">
               <nz-tag nzColor="blue" class="spec-tag">{{ doctor.specialty }}</nz-tag>
-              <span class="exp-text">{{ doctor.experience }} exp</span>
+              <span class="exp-text">{{ doctor.experience }} years exp</span>
             </div>
             <div class="doc-meta-info">
-              <p><span nz-icon nzType="idcard" nzTheme="outline"></span> {{ doctor.license }}</p>
-              <p><span nz-icon nzType="clock-circle" nzTheme="outline"></span> {{ doctor.startTime }} - {{ doctor.endTime }}</p>
+              <p><span nz-icon nzType="idcard" nzTheme="outline"></span> {{ doctor.doctor_license_no }}</p>
+              <p><span nz-icon nzType="clock-circle" nzTheme="outline"></span> {{ doctor.start_time }} - {{ doctor.end_time }}</p>
             </div>
           </div>
           <div class="selection-indicator" *ngIf="doctor.id === selectedDoctor?.id">
@@ -50,7 +50,6 @@
     <!-- Right Column: Doctor Details & Bookings Grid -->
     <div nz-col [nzXs]="24" [nzLg]="15">
       <div *ngIf="selectedDoctor; else noDoctorSelected" class="bookings-dashboard">
-        
         <!-- Doctor Profile Card Header -->
         <nz-card [nzBordered]="false" class="dashboard-header-card">
           <div class="header-details">
@@ -59,9 +58,8 @@
               <h2 class="header-name">{{ selectedDoctor.name }}</h2>
               <p class="header-specialty-text">{{ selectedDoctor.specialty }} • {{ selectedDoctor.experience }} Experience</p>
               <div class="header-meta-tags">
-                <nz-tag nzColor="default">License: {{ selectedDoctor.license }}</nz-tag>
-                <nz-tag nzColor="default">Duration: {{ selectedDoctor.consultationDuration }} mins/patient</nz-tag>
-                <nz-tag nzColor="default">Capacity: {{ selectedDoctor.maxCapacity }} per slot</nz-tag>
+                <nz-tag nzColor="default">License: {{ selectedDoctor.doctor_license_no }}</nz-tag>
+                <nz-tag nzColor="default">Duration: {{ selectedDoctor.consultation_duration }} mins/patient</nz-tag>
               </div>
             </div>
           </div>

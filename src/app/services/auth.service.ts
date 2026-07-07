@@ -5,6 +5,7 @@ import { throwError } from 'rxjs';
 
 export interface User {
   userId: number;
+  clinicId?: number;
   role: string;
   email?: string;
   userName?: string;
@@ -65,6 +66,7 @@ export class AuthService {
         if (res && res.result) {
           const user: User = {
             userId: res.userId,
+            clinicId: res.clinicId || undefined,
             role: res.role,
             email: userData.email,
             userName: res.userName || 'Patient',

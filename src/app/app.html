@@ -17,7 +17,7 @@
         Clinics
       </li>
       <ng-container *ngIf="userRole == 'clinic'">
-        <li nz-menu-item routerLink="/clinic/1/doctors-list" routerLinkActive="ant-menu-item-selected">
+        <li nz-menu-item [routerLink]="['/clinic', clinicId, 'doctors-list']" routerLinkActive="ant-menu-item-selected">
           Doctors List
         </li>
 
@@ -61,7 +61,7 @@
               Profile
             </li>
 
-            <li nz-menu-item *ngIf="userRole === 'clinic'" routerLink="/clinic/1/doctors-list" routerLinkActive="ant-menu-item-selected">
+            <li nz-menu-item *ngIf="userRole === 'clinic'" [routerLink]="['/clinic', clinicId, 'doctors-list']" routerLinkActive="ant-menu-item-selected">
               Doctor List
             </li>
 

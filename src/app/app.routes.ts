@@ -27,6 +27,7 @@ export const routes: Routes = [
     { path: 'admin/clinics', component: AdminClinics, canActivate: [adminGuard] },
     { path: 'admin/location-setup', component: AdminMasterSetup, canActivate: [adminGuard] },
     { path: 'clinic/doctors/add', component: DoctorsAdd },
+    { path: 'clinic/:clinicId/doctors/add', component: DoctorsAdd },
     { path: 'clinic/:clinicId/doctors-list', component: ClinicDoctorsList },
     { path: '**', redirectTo: '' }
 ];

@@ -40,6 +40,14 @@ export class App {
     return this.authService.currentUser()?.role;
   }
 
+  get userId() {
+    return this.authService.currentUser()?.userId;
+  }
+
+  get clinicId() {
+    return this.authService.currentUser()?.clinicId;
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);

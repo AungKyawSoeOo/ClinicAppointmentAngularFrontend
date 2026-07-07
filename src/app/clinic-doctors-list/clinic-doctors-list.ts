@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -12,6 +12,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { RouterLink, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-clinic-doctors-list',
@@ -34,90 +35,46 @@ import { RouterLink, ActivatedRoute } from '@angular/router';
   styleUrl: './clinic-doctors-list.css'
 })
 export class ClinicDoctorsList implements OnInit {
-  doctors = [
-    {
-      id: 1,
-      name: 'Dr. Kyaw Pyae Sone',
-      specialty: 'Dermatologist',
-      experience: '10 Years',
-      license: 'LIC-10294-MD',
-      phone: '0912345678',
-      consultationDuration: 15,
-      maxCapacity: 1,
-      startTime: '09:00',
-      endTime: '13:00',
-      workingDays: [1, 2, 3, 5], // Mon, Tue, Wed, Fri
-      imageUrl: 'https://api.dicebear.com/7.x/miniavs/svg?seed=john'
-    },
-    {
-      id: 2,
-      name: 'Dr. Kaung Pyae Kyaw',
-      specialty: 'Cardiologist',
-      experience: '12 Years',
-      license: 'LIC-48201-MD',
-      phone: '0998765432',
-      consultationDuration: 20,
-      maxCapacity: 1,
-      startTime: '10:00',
-      endTime: '15:00',
-      workingDays: [1, 3, 4, 5], // Mon, Wed, Thu, Fri
-      imageUrl: 'https://api.dicebear.com/7.x/miniavs/svg?seed=jane'
-    },
-    {
-      id: 3,
-      name: 'Dr. Aye Chan Zaw',
-      specialty: 'Pediatrician',
-      experience: '15 Years',
-      license: 'LIC-22839-MD',
-      phone: '0945678912',
-      consultationDuration: 15,
-      maxCapacity: 2,
-      startTime: '08:30',
-      endTime: '12:30',
-      workingDays: [2, 4, 6], // Tue, Thu, Sat
-      imageUrl: 'https://api.dicebear.com/7.x/miniavs/svg?seed=robert'
-    },
-    {
-      id: 4,
-      name: 'Dr. Wana',
-      specialty: 'Neurologist',
-      experience: '8 Years',
-      license: 'LIC-77492-MD',
-      phone: '09789123456',
-      consultationDuration: 30,
-      maxCapacity: 1,
-      startTime: '13:00',
-      endTime: '17:00',
-      workingDays: [1, 3, 5], // Mon, Wed, Fri
-      imageUrl: 'https://api.dicebear.com/7.x/miniavs/svg?seed=emily'
-    }
-  ];
-
+  doctors: any[] = [];
   clinicId: string | null = null;
   selectedDoctor: any = null;
   dates: any[] = [];
   selectedDateIndex = 0;
   bookings: any[] = [];
 
-  // Stable patient mock pool
-  private mockPatients = [
-    { name: 'Min Min', phone: '09420123456', email: 'kyaw@example.com'},
-    { name: 'Hla Hla', phone: '09250987654', email: 'hla@example.com'},
-    { name: 'Aung Aung', phone: '09782112233', email: 'aung.j@example.com'},
-    { name: 'Tony Stark', phone: '09900111222', email: 'tony@stark.com'},
-    { name: 'David Banner', phone: '09312345678', email: 'hulk@avengers.com'},
-    { name: 'Bruce Wayne', phone: '09400700700', email: 'bruce@wayne.org'},
-    { name: 'Diana Prince', phone: '09777888999', email: 'diana@themyscira.gov'},
-    { name: 'Clark Kent', phone: '09222444666', email: 'clark@dailyplanet.com'}
-  ];
-
-  constructor(private datePipe: DatePipe, private message: NzMessageService, private route: ActivatedRoute) {}
+  constructor(
+    private datePipe: DatePipe, 
+    private message: NzMessageService, 
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.clinicId = this.route.snapshot.paramMap.get('clinicId');
-    this.selectedDoctor = this.doctors[0];
-    this.generateNext14Days();
-    this.generateBookingsForSelected();
+    this.clinicId = this.route.snapshot.paramMap.get('clinicId') || '4';
+    this.fetchDoctors();
+  }
+
+  fetchDoctors(): void {
+    this.http.get(`http://localhost:3000/api/clinics/${this.clinicId}/doctors`).subscribe({
+      next: (res: any) => {
+        if (res.result && res.data.length > 0) {
+          this.doctors = res.data.map((d: any) => ({
+             ...d,
+             id: d.doctor_id,
+             name: d.doctor_name,
+             specialty: d.specialization,
+             workingDays: d.working_days,
+             imageUrl: `https://api.dicebear.com/7.x/miniavs/svg?seed=${encodeURIComponent(d.doctor_name)}`
+          }));
+          this.selectedDoctor = this.doctors[0];
+          this.generateNext14Days();
+          this.generateBookingsForSelected();
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => console.error(err)
+    });
   }
 
   selectDoctor(doctor: any): void {
@@ -167,69 +124,35 @@ export class ClinicDoctorsList implements OnInit {
     if (!selectedDateObj) return;
 
     if (!selectedDateObj.isWorkingDay) {
-      // Not a working day for this doctor, don't generate slots
       return;
     }
 
-    // Parse start and end times
-    const [startHour, startMin] = this.selectedDoctor.startTime.split(':').map(Number);
-    const [endHour, endMin] = this.selectedDoctor.endTime.split(':').map(Number);
-
-    const startMinutes = startHour * 60 + startMin;
-    const endMinutes = endHour * 60 + endMin;
-    const duration = this.selectedDoctor.consultationDuration;
-
-    let currentMin = startMinutes;
-    let slotIdx = 0;
-
-    while (currentMin + duration <= endMinutes) {
-      const slotStartHour = Math.floor(currentMin / 60);
-      const slotStartMin = currentMin % 60;
-      const slotEndHour = Math.floor((currentMin + duration) / 60);
-      const slotEndMin = (currentMin + duration) % 60;
-
-      const formatTime = (h: number, m: number) => {
+    const formatTime = (timeStr: string) => {
+        const [h, m] = timeStr.split(':').map(Number);
         const period = h >= 12 ? 'PM' : 'AM';
         const displayHour = h % 12 === 0 ? 12 : h % 12;
         const displayMin = m.toString().padStart(2, '0');
         return `${displayHour}:${displayMin} ${period}`;
-      };
+    };
 
-      const timeString = `${formatTime(slotStartHour, slotStartMin)} - ${formatTime(slotEndHour, slotEndMin)}`;
-
-      // Generate consistent bookings using selectedDoctor.id, selectedDateIndex, and slotIdx
-      const hash = (this.selectedDoctor.id * 10 + this.selectedDateIndex * 3 + slotIdx) % 10;
-      const isBooked = hash < 4; // 40% chance of being booked
-
-      if (isBooked) {
-        // Pick a patient from the mock pool
-        const patientIdx = (this.selectedDoctor.id * 5 + this.selectedDateIndex + slotIdx) % this.mockPatients.length;
-        const patient = this.mockPatients[patientIdx];
-
-        // Statuses: Available,Confirmed
-        const statusHash = (slotIdx + this.selectedDoctor.id) % 3;
-        const status = statusHash === 0 ? 'Confirmed' : 'Available';
-
-        this.bookings.push({
-          slotIndex: slotIdx,
-          time: timeString,
-          isBooked: true,
-          status,
-          patientName: patient.name,
-          patientPhone: patient.phone,
-          patientEmail: patient.email
+    if (this.selectedDoctor.time_slots) {
+        const targetDate = this.datePipe.transform(selectedDateObj.date, 'yyyy-MM-dd');
+        
+        const slotsForDate = this.selectedDoctor.time_slots.filter((ts: any) => {
+            const tsDate = ts.slot_date.split('T')[0];
+            return tsDate === targetDate;
         });
-      } else {
-        this.bookings.push({
-          slotIndex: slotIdx,
-          time: timeString,
-          isBooked: false,
-          status: 'Available'
-        });
-      }
 
-      currentMin += duration;
-      slotIdx++;
+        this.bookings = slotsForDate.map((slot: any, idx: number) => {
+            return {
+                slotIndex: idx,
+                time: `${formatTime(slot.slot_start)} - ${formatTime(slot.slot_end)}`,
+                isBooked: slot.is_booked,
+                status: slot.is_booked ? 'Confirmed' : 'Available',
+                // Keep patient mock data if booked for UI demo purposes
+                patientName: slot.is_booked ? 'John Doe' : '',
+            };
+        });
     }
   }
 }

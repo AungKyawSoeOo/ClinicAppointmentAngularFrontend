@@ -69,7 +69,7 @@
 
           <div nz-row [nzGutter]="16">
             <!-- Phone -->
-            <div nz-col [nzXs]="24" [nzSm]="24">
+            <div nz-col [nzXs]="24" [nzSm]="12">
               <nz-form-item>
                 <nz-form-label nzRequired nzFor="phone">Contact Number</nz-form-label>
                 <nz-form-control nzErrorTip="Enter a valid phone number (e.g. 0912345678 or +95912345678)">
@@ -93,16 +93,6 @@
                 <nz-form-label nzRequired nzFor="consultation_duration">Consultation Duration (Mins)</nz-form-label>
                 <nz-form-control nzErrorTip="Enter minutes per patient (5-120)">
                   <nz-input-number formControlName="consultation_duration" id="consultation_duration" [nzMin]="5" [nzMax]="120" style="width: 100%;" nzPlaceHolder="15"></nz-input-number>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-
-            <!-- Max Capacity per Slot -->
-            <div nz-col [nzXs]="24" [nzSm]="12">
-              <nz-form-item>
-                <nz-form-label nzRequired nzFor="max_capacity_per_slot">Max Patients per Slot</nz-form-label>
-                <nz-form-control nzErrorTip="Enter max capacity per time slot (1-20)">
-                  <nz-input-number formControlName="max_capacity_per_slot" id="max_capacity_per_slot" [nzMin]="1" [nzMax]="20" style="width: 100%;" nzPlaceHolder="1"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
