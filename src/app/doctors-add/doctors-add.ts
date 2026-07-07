@@ -91,7 +91,7 @@ export class DoctorsAdd implements OnInit {
       doctor_name: ['', [Validators.required, Validators.maxLength(100)]],
       doctor_license_no: ['', [Validators.required, Validators.maxLength(100)]],
       specialization: ['', [Validators.required]],
-      experience: ['', [Validators.required, Validators.min(0), Validators.max(60)]],
+      experience: ['', [Validators.required, Validators.min(1), Validators.max(70), Validators.pattern('^[0-9]+$')]],
       phone: ['', [Validators.required, Validators.pattern(/^(01|09|\+959)\d{7,10}$/)]],
       consultation_duration: [15, [Validators.required, Validators.min(5), Validators.max(120)]],
       working_days: [[], [Validators.required]],

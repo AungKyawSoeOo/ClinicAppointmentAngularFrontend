@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 
 interface Clinic {
   id: number;
+  clinic_id: number;
   name: string;
   liscense_number: string;
   license_photo: string;
@@ -69,6 +70,7 @@ export class Clinics implements OnInit {
       next: (res) => {
         if (res.result) {
           this.cities = res.data.filter(c => c.status === 'Active');
+           this.cdr.detectChanges();
         }
       },
       error: (err) => console.error(err)
@@ -78,6 +80,7 @@ export class Clinics implements OnInit {
       next: (res) => {
         if (res.result) {
           this.townships = res.data.filter(t => t.status === 'Active');
+          this.cdr.detectChanges();
         }
       },
       error: (err) => console.error(err)

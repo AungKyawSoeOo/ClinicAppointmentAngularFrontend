@@ -79,3 +79,10 @@
     border-radius: 6px;
     font-weight: 500;
 }
+
+.no-doctors {
+    text-align: center;
+    color: #999;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+}

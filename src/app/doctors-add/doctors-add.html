@@ -16,7 +16,7 @@
         <nz-divider class="card-divider"></nz-divider>
 
         <form nz-form [nzLayout]="'vertical'" [formGroup]="doctorForm" (ngSubmit)="submitForm()">
-          
+
           <div nz-row [nzGutter]="16">
             <!-- Doctor Name -->
             <div nz-col [nzXs]="24" [nzSm]="12">
@@ -60,8 +60,8 @@
             <div nz-col [nzXs]="24" [nzSm]="12">
               <nz-form-item>
                 <nz-form-label nzRequired nzFor="experience">Experience (Years)</nz-form-label>
-                <nz-form-control nzErrorTip="Enter years of experience (0-60)">
-                  <nz-input-number formControlName="experience" id="experience" [nzMin]="0" [nzMax]="60" [nzStep]="1" style="width: 100%;" nzPlaceHolder="e.g. 8"></nz-input-number>
+                <nz-form-control nzErrorTip="Enter years of experience (1-70)">
+                  <nz-input-number formControlName="experience" id="experience" [nzMin]="1" [nzMax]="70" [nzStep]="1" style="width: 100%;" nzPlaceHolder="e.g. 8"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
