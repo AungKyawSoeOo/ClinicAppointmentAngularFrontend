@@ -1,7 +1,10 @@
 <div class="appointment-section">
     <div class="section-header">
         <h2 nz-typography class="section-title">Book an Appointment</h2>
-        <p class="section-subtitle">Select a time slot to book your appointment with Doctor ID: {{ doctorId }} at Clinic ID: {{ clinicId }}</p>
+        <p class="section-subtitle">
+            Select a time slot to book your appointment with
+            <strong>{{ doctorName || ('Doctor ID: ' + doctorId) }}</strong>
+        </p>
         <div class="week-navigation">
             <button nz-button nzType="default" (click)="previousWeek()" [disabled]="currentWeekOffset === 0">
                 <span nz-icon nzType="left"></span> Previous Week
@@ -15,34 +18,44 @@
         </div>
     </div>
 
-    <nz-card class="schedule-card">
-        <nz-tabs class="schedule-tabs">
-            <nz-tab *ngFor="let day of schedule; let dayIndex = index" [nzTitle]="tabTitle">
-                <ng-template #tabTitle>
-                    <div class="tab-title-content">
-                        <span class="day-name">{{ day.dayName }}</span>
-                        <span class="day-date">{{ day.formattedDate }}</span>
-                    </div>
-                </ng-template>
+    <nz-spin [nzSpinning]="loading">
+        <nz-card class="schedule-card">
+            <nz-tabs class="schedule-tabs">
+                <nz-tab *ngFor="let day of schedule; let dayIndex = index" [nzTitle]="tabTitle">
+                    <ng-template #tabTitle>
+                        <div class="tab-title-content">
+                            <span class="day-name">{{ day.dayName }}</span>
+                            <span class="day-date">{{ day.formattedDate }}</span>
+                        </div>
+                    </ng-template>
 
-                <div class="slots-container">
-                    <h4 nz-typography class="slots-header">Available Time Slots</h4>
-                    <div class="slots-grid">
-                        <ng-container *ngFor="let slot of day.slots; let slotIndex = index">
-                            <button
-                                nz-button
-                                [nzType]="slot.isBooked ? 'default' : 'primary'"
-                                [nzGhost]="!slot.isBooked"
-                                [disabled]="slot.isBooked"
-                                class="time-slot-btn"
-                                [class.booked]="slot.isBooked"
-                                (click)="bookSlot(dayIndex, slotIndex, slot.time)">
-                                {{ slot.time }}
-                            </button>
+                    <div class="slots-container">
+                        <ng-container *ngIf="day.slots.length > 0; else noSlots">
+                            <h4 nz-typography class="slots-header">Available Time Slots</h4>
+                            <div class="slots-grid">
+                                <ng-container *ngFor="let slot of day.slots; let slotIndex = index">
+                                    <button
+                                        nz-button
+                                        [nzType]="slot.isBooked ? 'default' : 'primary'"
+                                        [nzGhost]="!slot.isBooked"
+                                        [disabled]="slot.isBooked"
+                                        class="time-slot-btn"
+                                        [class.booked]="slot.isBooked"
+                                        (click)="bookSlot(dayIndex, slotIndex, slot.time)">
+                                        {{ slot.time }}
+                                    </button>
+                                </ng-container>
+                            </div>
                         </ng-container>
+                        <ng-template #noSlots>
+                            <div style="text-align: center; padding: 40px 0; color: #999;">
+                                <span nz-icon nzType="calendar" style="font-size: 32px; margin-bottom: 12px; display: block;"></span>
+                                <p>No slots available for this day</p>
+                            </div>
+                        </ng-template>
                     </div>
-                </div>
-            </nz-tab>
-        </nz-tabs>
-    </nz-card>
+                </nz-tab>
+            </nz-tabs>
+        </nz-card>
+    </nz-spin>
 </div>
