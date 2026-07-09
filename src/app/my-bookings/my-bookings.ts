@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -7,6 +7,9 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 interface Booking {
   id: string;
@@ -26,64 +29,85 @@ interface Booking {
     NzButtonModule,
     NzTypographyModule,
     NzPopconfirmModule,
-    NzCardModule
+    NzCardModule,
+    NzSpinModule
   ],
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.css',
 })
 export class MyBookings implements OnInit {
   bookings: Booking[] = [];
+  loading = false;
+  
+  constructor(private message: NzMessageService, private http: HttpClient, private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
-  constructor(private message: NzMessageService) {}
-
-  ngOnInit(): void {
-    // Mock data for patient bookings
-    this.bookings = [
-      {
-        id: 'BKG-001',
-        clinicName: 'City Care Clinic',
-        doctorName: 'Dr. John Doe',
-        date: 'Jul 15, 2026',
-        time: '10:00 - 10:30',
-        status: 'Upcoming'
-      },
-      {
-        id: 'BKG-002',
-        clinicName: 'ABC Medical Center',
-        doctorName: 'Dr. Jane Smith',
-        date: 'Jul 18, 2026',
-        time: '14:30 - 15:00',
-        status: 'Upcoming'
-      },
-      {
-        id: 'BKG-003',
-        clinicName: 'Sunshine Health Clinic',
-        doctorName: 'Dr. Robert Brown',
-        date: 'Jun 20, 2026',
-        time: '09:00 - 09:30',
-        status: 'Completed'
-      },
-      {
-        id: 'BKG-004',
-        clinicName: 'Heaven Health Clinic',
-        doctorName: 'Dr. Emily White',
-        date: 'Jun 10, 2026',
-        time: '11:00 - 11:30',
-        status: 'Cancelled'
-      }
-    ];
+ngOnInit(): void {
+    this.loadPatientBookings();
   }
 
-  cancelBooking(id: string): void {
-    const bookingIndex = this.bookings.findIndex(b => b.id === id);
-    if (bookingIndex !== -1) {
-      // In a real app, this would be an API call.
-      const updatedBookings = [...this.bookings];
-      updatedBookings[bookingIndex].status = 'Cancelled';
-      this.bookings = updatedBookings;
-      this.message.success('Booking cancelled successfully.');
+  loadPatientBookings(): void {
+    
+    const currentUser = this.authService.currentUser();
+    const userId = currentUser ? currentUser.userId : null;
+
+    if (!userId) {
+      this.message.error('User session not found. Please login again.');
+      return;
     }
+
+    this.loading = true;
+
+    this.http.get<{success: boolean, data: Booking[]}>(`http://localhost:3000/api/patients/${userId}/bookings`)
+      .subscribe({
+        next: (res) => {
+          this.loading = false;
+          if (res.success) {
+            this.bookings = res.data;
+          } else {
+            this.message.error('Failed to load bookings');
+          }
+        },
+        error: (err) => {
+          this.loading = false;
+          console.error(err);
+          this.message.error('Server error while fetching bookings');
+        }
+      });
   }
+
+  // my-bookings.ts ထဲက cancelBooking function ကို အခုလို အစားထိုး ပြင်ရေးပါ
+
+cancelBooking(id: string): void {
+  this.loading = true;
+
+  // Backend ရဲ့ PUT API လိပ်စာဆီသို့ လှမ်းပို့ခြင်း (id ဆိုတာ အပေါ်က appointment_id ဖြစ်ပါတယ်)
+  this.http.put<{success: boolean, message: string}>(`http://localhost:3000/api/patients/cancel/${id}`, {})
+    .subscribe({
+      next: (res) => {
+        this.loading = false;
+        if (res.success) {
+          // DB မှာ အောင်မြင်စွာ ပြောင်းပြီးရင် UI ဘက်မှာပါ 'Cancelled' လို့ ချက်ချင်း အော်တို လိုက်ပြောင်းပေးခြင်း
+          const bookingIndex = this.bookings.findIndex(b => b.id === id);
+          if (bookingIndex !== -1) {
+            const updatedBookings = [...this.bookings];
+            updatedBookings[bookingIndex].status = 'Cancelled';
+            this.bookings = updatedBookings;
+          }
+          this.message.success('Booking cancelled successfully.');
+        } else {
+          this.message.error(res.message || 'Failed to cancel booking');
+        }
+
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error('Cancel booking error:', err);
+        this.message.error(err.error?.message || 'Server error occurred while cancelling');
+        this.cdr.detectChanges();
+      }
+    });
+}
 
   getStatusColor(status: string): string {
     switch (status) {

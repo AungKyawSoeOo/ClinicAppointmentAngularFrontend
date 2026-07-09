@@ -9,6 +9,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'app-doctors-appointment',
@@ -19,7 +21,8 @@ import { HttpClient } from '@angular/common/http';
     NzTypographyModule,
     NzCardModule,
     NzIconModule,
-    NzSpinModule
+    NzSpinModule,
+    NzPopconfirmModule
   ],
   providers: [DatePipe],
   templateUrl: './doctors-appointment.html',
@@ -41,7 +44,8 @@ export class DoctorsAppointment implements OnInit {
     private message: NzMessageService,
     private datePipe: DatePipe,
     private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -130,11 +134,53 @@ export class DoctorsAppointment implements OnInit {
   }
 
   bookSlot(dayIndex: number, slotIndex: number, time: string): void {
-    const slot = this.schedule[dayIndex].slots[slotIndex];
-    if (!slot.isBooked) {
-      // TODO: Call backend to actually book
-      slot.isBooked = true;
-      this.message.success(`Successfully booked appointment on ${this.schedule[dayIndex].dayName} at ${time}`);
+    const slot = this.schedule[dayIndex].slots[slotIndex];  
+
+    const currentUser = this.authService.currentUser();
+    console.log('--- Current User Data ---', currentUser);    
+
+    // if (!slot.isBooked) {
+    //   // TODO: Call backend to actually book
+    //   slot.isBooked = true;
+    //   this.message.success(`Successfully booked appointment on ${this.schedule[dayIndex].dayName} at ${time}`);
+    // }
+
+    const patientId = currentUser ? currentUser.userId : null; 
+
+    if (!patientId) {
+      this.message.error('Please login first to book an appointment');
+      return;
     }
+
+    if (slot.isBooked) return;
+
+    this.loading = true;
+
+    
+    const bookingPayload = {
+      patient_id: patientId,
+      slot_id: slot.slotId, 
+      booking_type: 'online',
+      status: 'booked'
+    };
+
+    
+    this.http.post('http://localhost:3000/api/appointments/book', bookingPayload).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        if (res.success) {
+          slot.isBooked = true; 
+          this.message.success(`Successfully booked appointment on ${this.schedule[dayIndex].dayName} at ${time}`);
+        } else {
+          this.message.error(res.message || 'Failed to book appointment');
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error('Booking error:', err);
+        this.message.error(err.error?.message || 'Server error occurred during booking');
+      }
+    });
   }
 }
