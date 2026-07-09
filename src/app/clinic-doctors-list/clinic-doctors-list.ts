@@ -161,10 +161,10 @@ export class ClinicDoctorsList implements OnInit {
     .subscribe({
       next: (res) => {
         if (res.success) {
-          // ရလာတဲ့ ဒေတာအစစ်တွေကို UI က မျှော်လင့်ထားတဲ့ Object ပုံစံအတိုင်း Map လုပ်ပေးခြင်း
+          
           this.bookings = res.data.map((slot: any, idx: number) => {
             
-            // Database ထဲက အသေးစာသား status များကို HTML Tag အတွက် အကြီးစာသား ပြန်ပြောင်းပေးခြင်း
+            
             let displayStatus = 'Available';
             if (slot.is_booked) {
               if (slot.appointment_status === 'booked') displayStatus = 'Confirmed';
@@ -184,7 +184,7 @@ export class ClinicDoctorsList implements OnInit {
             };
           });
           
-          this.cdr.detectChanges(); // UI ကို ချက်ချင်း Update လုပ်ရန်
+          this.cdr.detectChanges(); 
         }
       },
       error: (err) => {

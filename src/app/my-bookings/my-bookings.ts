@@ -75,18 +75,18 @@ ngOnInit(): void {
       });
   }
 
-  // my-bookings.ts ထဲက cancelBooking function ကို အခုလို အစားထိုး ပြင်ရေးပါ
+  
 
 cancelBooking(id: string): void {
   this.loading = true;
 
-  // Backend ရဲ့ PUT API လိပ်စာဆီသို့ လှမ်းပို့ခြင်း (id ဆိုတာ အပေါ်က appointment_id ဖြစ်ပါတယ်)
+  
   this.http.put<{success: boolean, message: string}>(`http://localhost:3000/api/patients/cancel/${id}`, {})
     .subscribe({
       next: (res) => {
         this.loading = false;
         if (res.success) {
-          // DB မှာ အောင်မြင်စွာ ပြောင်းပြီးရင် UI ဘက်မှာပါ 'Cancelled' လို့ ချက်ချင်း အော်တို လိုက်ပြောင်းပေးခြင်း
+          
           const bookingIndex = this.bookings.findIndex(b => b.id === id);
           if (bookingIndex !== -1) {
             const updatedBookings = [...this.bookings];
