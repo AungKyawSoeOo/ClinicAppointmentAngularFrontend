@@ -13,6 +13,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
 interface Clinic {
   id: number;
+  clinic_id: number;
   name: string;
   liscense_number: string;
   license_photo: string;

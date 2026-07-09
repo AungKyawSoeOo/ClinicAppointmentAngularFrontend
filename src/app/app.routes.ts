@@ -11,6 +11,7 @@ import { Myprofile } from './myprofile/myprofile';
 import { AdminClinics } from './admin/admin-clinics/admin-clinics';
 import { AdminMasterSetup } from './admin/admin-master-setup/admin-master-setup';
 import { adminGuard } from './guards/admin.guard';
+import { authGuard } from './guards/auth.guard';
 import { DoctorsAdd } from './doctors-add/doctors-add';
 import { ClinicDoctorsList } from './clinic-doctors-list/clinic-doctors-list';
 
@@ -21,7 +22,11 @@ export const routes: Routes = [
     { path: 'login', component: Login },
     { path: 'clinics', component: Clinics },
     { path: 'clinics/:id/doctors', component: ClinicDoctors },
-    { path: 'clinics/:clinicId/doctors/:doctorId/appointment', component: DoctorsAppointment },
+    {
+        path: 'clinics/:clinicId/doctors/:doctorId/appointment',
+        component: DoctorsAppointment,
+        canActivate: [authGuard]
+    },
     { path: 'my-bookings', component: MyBookings },
     { path: 'profile', component: Myprofile },
     { path: 'admin/clinics', component: AdminClinics, canActivate: [adminGuard] },
