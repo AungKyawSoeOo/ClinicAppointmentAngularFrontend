@@ -63,6 +63,7 @@ ngOnInit(): void {
           this.loading = false;
           if (res.success) {
             this.bookings = res.data;
+            this.cdr.detectChanges();
           } else {
             this.message.error('Failed to load bookings');
           }

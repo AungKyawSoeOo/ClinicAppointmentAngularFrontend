@@ -168,7 +168,7 @@ export class ClinicDoctorsList implements OnInit {
             let displayStatus = 'Available';
             if (slot.is_booked) {
               if (slot.appointment_status === 'booked') displayStatus = 'Confirmed';
-              else if (slot.appointment_status === 'completed') displayStatus = 'Completed';
+              // else if (slot.appointment_status === 'completed') displayStatus = 'Completed';
               else if (slot.appointment_status === 'cancelled') displayStatus = 'Cancelled';
               else displayStatus = 'Confirmed'; // default fallback
             }
