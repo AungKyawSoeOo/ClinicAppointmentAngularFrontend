@@ -12,6 +12,8 @@ import { AdminClinics } from './admin/admin-clinics/admin-clinics';
 import { AdminMasterSetup } from './admin/admin-master-setup/admin-master-setup';
 import { adminGuard } from './guards/admin.guard';
 import { authGuard } from './guards/auth.guard';
+import { clinicAccessGuard } from './guards/clinic-access.guard';
+import { clinicGuard } from './guards/clinic.guard';
 import { DoctorsAdd } from './doctors-add/doctors-add';
 import { ClinicDoctorsList } from './clinic-doctors-list/clinic-doctors-list';
 
@@ -27,12 +29,12 @@ export const routes: Routes = [
         component: DoctorsAppointment,
         canActivate: [authGuard]
     },
-    { path: 'my-bookings', component: MyBookings },
+    { path: 'my-bookings', component: MyBookings , canActivate: [authGuard] },
     { path: 'profile', component: Myprofile },
     { path: 'admin/clinics', component: AdminClinics, canActivate: [adminGuard] },
     { path: 'admin/location-setup', component: AdminMasterSetup, canActivate: [adminGuard] },
-    { path: 'clinic/doctors/add', component: DoctorsAdd },
-    { path: 'clinic/:clinicId/doctors/add', component: DoctorsAdd },
-    { path: 'clinic/:clinicId/doctors-list', component: ClinicDoctorsList },
+    { path: 'clinic/doctors/add', component: DoctorsAdd , canActivate: [clinicGuard] },
+    { path: 'clinic/:clinicId/doctors/add', component: DoctorsAdd, canActivate: [clinicGuard] },
+    { path: 'clinic/:clinicId/doctors-list', component: ClinicDoctorsList, canActivate: [clinicGuard, clinicAccessGuard] },
     { path: '**', redirectTo: '' }
 ];

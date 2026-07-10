@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
@@ -15,7 +15,7 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
   constructor(private msg: NzMessageService) { }
   loading = false;
   private fb = inject(NonNullableFormBuilder);
@@ -27,8 +27,20 @@ export class Login {
   validateForm = this.fb.group({
     email: this.fb.control('', [Validators.required, Validators.email]),
     password: this.fb.control('', [Validators.required]),
-    remember: this.fb.control(true)
+    remember: this.fb.control(false)
   });
+
+  ngOnInit(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const savedEmail = localStorage.getItem('rememberedEmail');
+      if (savedEmail) {
+        this.validateForm.patchValue({
+          email: savedEmail,
+          remember: true
+        });
+      }
+    }
+  }
 
   submitForm(): void {
     if (this.validateForm.invalid) {
@@ -48,8 +60,9 @@ export class Login {
         this.loading = false;
         this.msg.success('Login successful');
         this.cdr.detectChanges();
+        const currentRemember = this.validateForm.value.remember ?? false;
         this.validateForm.reset({
-          remember: true
+          remember: currentRemember
         });
 
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';

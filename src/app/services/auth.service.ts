@@ -27,13 +27,24 @@ export class AuthService {
   readonly isLoggedIn = computed(() => this.currentUserSignal() !== null);
 
   private getUserFromStorage(): User | null {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const userJson = localStorage.getItem('currentUser');
+    if (typeof window !== 'undefined') {
+      let userJson = null;
+      if (window.localStorage) {
+        userJson = localStorage.getItem('currentUser');
+      }
+      if (!userJson && window.sessionStorage) {
+        userJson = sessionStorage.getItem('currentUser');
+      }
       if (userJson) {
         try {
           return JSON.parse(userJson);
         } catch (e) {
-          localStorage.removeItem('currentUser');
+          if (window.localStorage) {
+            localStorage.removeItem('currentUser');
+          }
+          if (window.sessionStorage) {
+            sessionStorage.removeItem('currentUser');
+          }
         }
       }
     }
@@ -72,8 +83,21 @@ export class AuthService {
             userName: res.userName || 'Patient',
             status: res.status
           };
-          if (typeof window !== 'undefined' && window.localStorage) {
-            localStorage.setItem('currentUser', JSON.stringify(user));
+          if (typeof window !== 'undefined') {
+            if (userData.remember) {
+              if (window.localStorage) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('rememberedEmail', userData.email);
+              }
+            } else {
+              if (window.sessionStorage) {
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+              }
+              if (window.localStorage) {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('rememberedEmail');
+              }
+            }
           }
           this.currentUserSignal.set(user);
         }
@@ -87,8 +111,13 @@ export class AuthService {
   }
 
   logout() {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.removeItem('currentUser');
+    if (typeof window !== 'undefined') {
+      if (window.localStorage) {
+        localStorage.removeItem('currentUser');
+      }
+      if (window.sessionStorage) {
+        sessionStorage.removeItem('currentUser');
+      }
     }
     this.currentUserSignal.set(null);
   }
@@ -117,10 +146,20 @@ export class AuthService {
     const current = this.currentUserSignal();
     if (current) {
       const updatedUser = { ...current, userName: newName };
-      if (typeof window !== 'undefined' && window.localStorage) {
-        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      if (typeof window !== 'undefined') {
+        if (window.localStorage && localStorage.getItem('currentUser')) {
+          localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+        }
+        if (window.sessionStorage && sessionStorage.getItem('currentUser')) {
+          sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
+        }
       }
       this.currentUserSignal.set(updatedUser);
     }
+  }
+
+  getAuthorizedClinicId(): number | undefined {
+    const user = this.currentUser();
+    return user?.clinicId;
   }
 }
