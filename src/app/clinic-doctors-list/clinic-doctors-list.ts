@@ -135,24 +135,62 @@ export class ClinicDoctorsList implements OnInit {
         return `${displayHour}:${displayMin} ${period}`;
     };
 
-    if (this.selectedDoctor.time_slots) {
-        const targetDate = this.datePipe.transform(selectedDateObj.date, 'yyyy-MM-dd');
-        
-        const slotsForDate = this.selectedDoctor.time_slots.filter((ts: any) => {
-            const tsDate = ts.slot_date.split('T')[0];
-            return tsDate === targetDate;
-        });
+    const targetDate = this.datePipe.transform(selectedDateObj.date, 'yyyy-MM-dd');
 
-        this.bookings = slotsForDate.map((slot: any, idx: number) => {
+    // if (this.selectedDoctor.time_slots) {
+    //     const targetDate = this.datePipe.transform(selectedDateObj.date, 'yyyy-MM-dd');
+        
+    //     const slotsForDate = this.selectedDoctor.time_slots.filter((ts: any) => {
+    //         const tsDate = ts.slot_date.split('T')[0];
+    //         return tsDate === targetDate;
+    //     });
+
+    //     this.bookings = slotsForDate.map((slot: any, idx: number) => {
+    //         return {
+    //             slotIndex: idx,
+    //             time: `${formatTime(slot.slot_start)} - ${formatTime(slot.slot_end)}`,
+    //             isBooked: slot.is_booked,
+    //             status: slot.is_booked ? 'Confirmed' : 'Available',
+    //             // Keep patient mock data if booked for UI demo purposes
+    //             patientName: slot.is_booked ? 'John Doe' : '',
+    //         };
+    //     });
+    // }
+
+    this.http.get<any>(`http://localhost:3000/api/clinics/doctors/${this.selectedDoctor.id}/bookings?date=${targetDate}`)
+    .subscribe({
+      next: (res) => {
+        if (res.success) {
+          
+          this.bookings = res.data.map((slot: any, idx: number) => {
+            
+            
+            let displayStatus = 'Available';
+            if (slot.is_booked) {
+              if (slot.appointment_status === 'booked') displayStatus = 'Confirmed';
+              // else if (slot.appointment_status === 'completed') displayStatus = 'Completed';
+              else if (slot.appointment_status === 'cancelled') displayStatus = 'Cancelled';
+              else displayStatus = 'Confirmed'; // default fallback
+            }
+
             return {
-                slotIndex: idx,
-                time: `${formatTime(slot.slot_start)} - ${formatTime(slot.slot_end)}`,
-                isBooked: slot.is_booked,
-                status: slot.is_booked ? 'Confirmed' : 'Available',
-                // Keep patient mock data if booked for UI demo purposes
-                patientName: slot.is_booked ? 'John Doe' : '',
+              slotIndex: idx,
+              time: `${formatTime(slot.slot_start)} - ${formatTime(slot.slot_end)}`,
+              isBooked: slot.is_booked,
+              status: displayStatus,
+              patientName: slot.patientName || '',
+              patientPhone: slot.patientPhone || '-',
+              patientEmail: slot.patientEmail || '-'
             };
-        });
-    }
+          });
+          
+          this.cdr.detectChanges(); 
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching dynamic bookings:', err);
+        this.message.error('Failed to load real-time patient bookings.');
+      }
+    });
   }
 }

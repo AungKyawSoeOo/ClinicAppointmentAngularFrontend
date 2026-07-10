@@ -41,7 +41,15 @@
                                         [disabled]="slot.isBooked"
                                         class="time-slot-btn"
                                         [class.booked]="slot.isBooked"
-                                        (click)="bookSlot(dayIndex, slotIndex, slot.time)">
+                                        
+                                        
+                                        nz-popconfirm
+                                        nzPopconfirmTitle="Are you sure you want to book this time slot?"
+                                        nzPopconfirmPlacement="top"
+                                        nzOkText="Yes, Book"
+                                        nzCancelText="No"
+                                        (nzOnConfirm)="bookSlot(dayIndex, slotIndex, slot.time)"
+                                        >
                                         {{ slot.time }}
                                     </button>
                                 </ng-container>
