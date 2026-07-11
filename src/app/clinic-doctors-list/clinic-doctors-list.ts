@@ -161,14 +161,12 @@ export class ClinicDoctorsList implements OnInit {
     .subscribe({
       next: (res) => {
         if (res.success) {
-          
+
           this.bookings = res.data.map((slot: any, idx: number) => {
-            
-            
             let displayStatus = 'Available';
             if (slot.is_booked) {
               if (slot.appointment_status === 'booked') displayStatus = 'Confirmed';
-              // else if (slot.appointment_status === 'completed') displayStatus = 'Completed';
+              else if (slot.appointment_status === 'completed') displayStatus = 'Completed';
               else if (slot.appointment_status === 'cancelled') displayStatus = 'Cancelled';
               else displayStatus = 'Confirmed'; // default fallback
             }
@@ -183,8 +181,8 @@ export class ClinicDoctorsList implements OnInit {
               patientEmail: slot.patientEmail || '-'
             };
           });
-          
-          this.cdr.detectChanges(); 
+
+          this.cdr.detectChanges();
         }
       },
       error: (err) => {
