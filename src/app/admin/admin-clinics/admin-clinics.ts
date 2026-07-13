@@ -16,6 +16,8 @@ interface Clinic {
   liscense_number: string;
   license_photo: string;
   location: string;
+  city: string,
+  township: string,
   registeredDate: string;
   status: string; // 'pending' | 'active' | 'inactive'
 }

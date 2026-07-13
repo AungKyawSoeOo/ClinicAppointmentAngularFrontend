@@ -25,7 +25,7 @@
             <img nz-image width="80px" [nzSrc]="'http://localhost:3000/uploads/' + data.license_photo" alt="License" *ngIf="data.license_photo" />
             <span *ngIf="!data.license_photo">No Photo</span>
           </td>
-          <td>{{ data.location }}</td>
+          <td>{{ data.location }}, <br> {{data.township}} township, {{ data.city }}</td>
           <td>{{ data.registeredDate }}</td>
           <td>
             <nz-tag
