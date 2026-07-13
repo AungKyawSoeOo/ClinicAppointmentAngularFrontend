@@ -38,11 +38,10 @@
                                         nz-button
                                         [nzType]="slot.isBooked ? 'default' : 'primary'"
                                         [nzGhost]="!slot.isBooked"
-                                        [disabled]="slot.isBooked"
+                                        [disabled]="slot.isBooked || slot.isPast"
                                         class="time-slot-btn"
                                         [class.booked]="slot.isBooked"
-                                        
-                                        
+
                                         nz-popconfirm
                                         nzPopconfirmTitle="Are you sure you want to book this time slot?"
                                         nzPopconfirmPlacement="top"
