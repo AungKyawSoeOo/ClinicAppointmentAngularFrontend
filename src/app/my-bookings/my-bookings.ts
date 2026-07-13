@@ -128,4 +128,24 @@ cancelBooking(id: string): void {
         return 'default';
     }
   }
+
+  formatTimeRange(timeRange: string): string {
+    // Split the string into start and end times
+    const [start, end] = timeRange.split(' - ');
+
+    const convertTo12Hour = (time: string) => {
+      const [hours, minutes] = time.split(':').map(Number);
+      const date = new Date();
+      date.setHours(hours, minutes);
+
+      // Returns format like "2:55 PM"
+      return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    };
+
+    return `${convertTo12Hour(start)} - ${convertTo12Hour(end)}`;
+  }
 }

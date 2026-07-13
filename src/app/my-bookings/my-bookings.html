@@ -23,7 +23,7 @@
                         <td>{{ data.doctorName }}</td>
                         <td>
                             <div>{{ data.date }}</div>
-                            <div class="booking-time">{{ data.time }}</div>
+                            <div class="booking-time">{{ formatTimeRange(data.time) }}</div>
                         </td>
                         <td>
                             <nz-tag [nzColor]="getStatusColor(data.status)">
