@@ -110,7 +110,17 @@ export class ClinicRegister implements OnInit {
     }
   }
 
-   handleChange(info: NzUploadChangeParam): void {
+  handleChange(info: NzUploadChangeParam): void {
+
+    const file = info.file;
+    const isImage = file.type?.startsWith('image/');
+
+    if (!isImage && file.status !== 'removed') {
+      this.messageService.error('You can only upload image files!');
+      this.fileList = [];
+      return;
+    }
+
     let newFileList = [...info.fileList];
     newFileList = newFileList.slice(-1);
 

@@ -88,7 +88,7 @@
     </nz-form-item>
 
     <nz-form-item>
-        <nz-upload nzAction="" (nzChange)="handleChange($event)" [(nzFileList)]="fileList" [nzLimit]="1">
+        <nz-upload nzAction="" [nzAccept]="'image/*'" (nzChange)="handleChange($event)" [(nzFileList)]="fileList" [nzLimit]="1">
             <button nz-button type="button">
                 <nz-icon nzType="upload" />
                 Liscense Photo
