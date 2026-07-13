@@ -122,20 +122,30 @@ export class AdminMasterSetup implements OnInit {
         next: (res) => {
           if (res.result) {
             this.cities = [...this.cities, res.data];
+            this.filteredCities = [...this.cities];
           }
-          this.isCityModalVisible = false;
-          this.newCity = {};
+          setTimeout(() => {
+            this.isCityModalVisible = false;
+            this.newCity = {};
+            this.cdr.detectChanges();
+          });
         },
         error: (err) => {
           console.error('Failed to add city:', err);
           this.msg.error(err);
-          this.isCityModalVisible = false;
-          this.newCity = {};
+          setTimeout(() => {
+            this.isCityModalVisible = false;
+            this.newCity = {};
+            this.cdr.detectChanges();
+          });
         }
       });
     } else {
-      this.isCityModalVisible = false;
-      this.newCity = {};
+      setTimeout(() => {
+        this.isCityModalVisible = false;
+        this.newCity = {};
+        this.cdr.detectChanges();
+      });
     }
   }
 
@@ -158,20 +168,30 @@ export class AdminMasterSetup implements OnInit {
         next: (res) => {
           if (res.result) {
             this.townships = [...this.townships, res.data];
+            this.filteredTownships = [...this.townships];
           }
-          this.isTownshipModalVisible = false;
-          this.newTownship = {};
+          setTimeout(() => {
+            this.isTownshipModalVisible = false;
+            this.newTownship = {};
+            this.cdr.detectChanges();
+          });
         },
         error: (err) => {
           console.error('Failed to add township:', err);
           this.msg.error(err);
-          this.isTownshipModalVisible = false;
-          this.newTownship = {};
+          setTimeout(() => {
+            this.isTownshipModalVisible = false;
+            this.newTownship = {};
+            this.cdr.detectChanges();
+          });
         }
       });
     } else {
-      this.isTownshipModalVisible = false;
-      this.newTownship = {};
+      setTimeout(() => {
+        this.isTownshipModalVisible = false;
+        this.newTownship = {};
+        this.cdr.detectChanges();
+      });
     }
   }
 
