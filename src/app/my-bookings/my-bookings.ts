@@ -38,7 +38,7 @@ interface Booking {
 export class MyBookings implements OnInit {
   bookings: Booking[] = [];
   loading = false;
-  
+
   constructor(private message: NzMessageService, private http: HttpClient, private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
 ngOnInit(): void {
@@ -46,7 +46,7 @@ ngOnInit(): void {
   }
 
   loadPatientBookings(): void {
-    
+
     const currentUser = this.authService.currentUser();
     const userId = currentUser ? currentUser.userId : null;
 
@@ -76,23 +76,29 @@ ngOnInit(): void {
       });
   }
 
-  
+
 
 cancelBooking(id: string): void {
   this.loading = true;
 
-  
+
   this.http.put<{success: boolean, message: string}>(`http://localhost:3000/api/patients/cancel/${id}`, {})
     .subscribe({
       next: (res) => {
         this.loading = false;
         if (res.success) {
-          
+
           const bookingIndex = this.bookings.findIndex(b => b.id === id);
           if (bookingIndex !== -1) {
             const updatedBookings = [...this.bookings];
             updatedBookings[bookingIndex].status = 'Cancelled';
             this.bookings = updatedBookings;
+
+            this.bookings = updatedBookings.sort((a, b) => {
+              if (a.status === 'Upcoming' && b.status !== 'Upcoming') return -1;
+              if (a.status !== 'Upcoming' && b.status === 'Upcoming') return 1;
+              return 0;
+            });
           }
           this.message.success('Booking cancelled successfully.');
         } else {
