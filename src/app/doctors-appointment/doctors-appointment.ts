@@ -81,6 +81,12 @@ export class DoctorsAppointment implements OnInit {
     let startDate = new Date();
     startDate.setDate(startDate.getDate() + (this.currentWeekOffset * 7));
 
+    // Getting Current Date and Time
+    const now = new Date();
+    const todayStr = this.datePipe.transform(now, 'yyyy-MM-dd');
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
     this.schedule = [];
     for (let i = 0; i < 7; i++) {
       const date = new Date(startDate);
@@ -96,11 +102,26 @@ export class DoctorsAppointment implements OnInit {
         return tsDate === dateStr;
       });
 
-      const slots = slotsForDay.map(ts => ({
-        slotId: ts.slot_id,
-        time: `${this.formatTime(ts.slot_start)} - ${this.formatTime(ts.slot_end)}`,
-        isBooked: ts.is_booked
-      }));
+      const slots = slotsForDay.map(ts => {
+        // Check if the slot is in the past for today
+        let isPast = false;
+
+        if (dateStr! < todayStr!) {
+          isPast = true;
+        }else if (dateStr === todayStr) {
+          const [hours, minutes] = ts.slot_start.split(':').map(Number);
+          if (hours < currentHour || (hours === currentHour && minutes <= currentMinute)) {
+            isPast = true;
+          }
+        }
+
+        return {
+          slotId: ts.slot_id,
+          time: `${this.formatTime(ts.slot_start)} - ${this.formatTime(ts.slot_end)}`,
+          isBooked: ts.is_booked,
+          isPast: isPast // Flag for Frontend to determine if the slot is in the past
+        };
+      });
 
       this.schedule.push({
         date,
