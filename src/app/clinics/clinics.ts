@@ -69,7 +69,7 @@ export class Clinics implements OnInit {
     this.locationService.getCities().subscribe({
       next: (res) => {
         if (res.result) {
-          this.cities = res.data.filter(c => c.status === 'Active');
+          this.cities = res.data;
            this.cdr.detectChanges();
         }
       },
@@ -79,7 +79,7 @@ export class Clinics implements OnInit {
     this.locationService.getTownships().subscribe({
       next: (res) => {
         if (res.result) {
-          this.townships = res.data.filter(t => t.status === 'Active');
+          this.townships = res.data;
           this.cdr.detectChanges();
         }
       },
