@@ -18,6 +18,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import {timeRangeValidator} from "../validators/startendTime.validator";
 
 @Component({
   selector: 'app-doctors-add',
@@ -97,7 +98,7 @@ export class DoctorsAdd implements OnInit {
       working_days: [[], [Validators.required]],
       start_time: [null, [Validators.required]],
       end_time: [null, [Validators.required]]
-    });
+    },{ validators: timeRangeValidator });
   }
 
   // Live Avatar Seed calculation based on Doctor Name
@@ -152,6 +153,9 @@ export class DoctorsAdd implements OnInit {
         }
       });
     } else {
+      if (this.doctorForm.hasError('timeMismatch')) {
+      this.message.error('End time must be later than the start time.');
+    } else {
       Object.values(this.doctorForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
@@ -159,6 +163,7 @@ export class DoctorsAdd implements OnInit {
         }
       });
       this.message.error('Please fill in all required fields correctly.');
+    }
     }
   }
 
