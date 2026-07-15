@@ -8,7 +8,7 @@
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-        <nz-form-control nzErrorTip="Enter Your Email">
+        <nz-form-control [nzErrorTip]="emailErrorTpl">
             <nz-input-wrapper>
                 <nz-icon nzInputPrefix nzType="mail" />
                 <input nz-input formControlName="email" placeholder="Email" />
@@ -121,5 +121,14 @@
         @else if (control.hasError('passwordMismatch')) {
         Passwords do not match.
         }
+    </ng-template>
+
+    <ng-template #emailErrorTpl let-control>
+        <ng-container *ngIf="control.hasError('required')">
+            Enter your email
+        </ng-container>
+        <ng-container *ngIf="control.hasError('email')">
+            Invalid email address
+        </ng-container>
     </ng-template>
 </form>
