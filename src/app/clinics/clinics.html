@@ -15,7 +15,7 @@
             }
         </nz-select>
     </div>
-    <div nz-row [nzGutter]="[24, 24]">
+    <div *ngIf="clinics && clinics.length > 0; else noDataTemplate" nz-row [nzGutter]="[24, 24]">
         <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" *ngFor="let clinic of clinics">
             <nz-card nzHoverable class="specialty-card" [routerLink]="['/clinics', clinic.clinic_id, 'doctors']">
                 <div class="specialty-content">
@@ -38,3 +38,13 @@
             </nz-card>
         </div>
     </div>
+    <!-- No Data Template -->
+    <ng-template #noDataTemplate>
+        <div class="no-datatemp">
+            <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+                <ng-template #contentTpl>
+                    <span style="color: #888;">No clinics found for the selected area.</span>
+                </ng-template>
+            </nz-empty>
+        </div>
+    </ng-template>

@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { LocationService, City, Township } from '../services/location.service';
 import { FormsModule } from '@angular/forms';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 interface Clinic {
   id: number;
@@ -42,7 +43,8 @@ interface Clinic {
     NzDividerModule,
     NzDropdownModule,
     NzSelectModule,
-    FormsModule
+    FormsModule,
+    NzEmptyModule
   ],
   templateUrl: './clinics.html',
   styleUrl: './clinics.css',

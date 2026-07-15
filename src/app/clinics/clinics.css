@@ -62,3 +62,16 @@
   font-size: 0.85rem;
   color: #8c8c8c;
 }
+
+.no-datatemp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 50px 0;
+}
+
+.no-datatemp span {
+  color: #888;
+  font-size: 16px;
+}
