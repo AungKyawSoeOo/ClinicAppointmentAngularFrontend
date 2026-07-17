@@ -37,6 +37,15 @@ export class Myprofile implements OnInit {
   isEditMode = false;
   loading = false;
 
+  disabledDate = (current: Date): boolean => {
+    if (!current) {
+      return false;
+    }
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    return current.getTime() > today.getTime();
+  };
+
   // Active session and profile data
   userId: number | null = null;
   patientData: any = {
